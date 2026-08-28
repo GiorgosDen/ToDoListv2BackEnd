@@ -36,3 +36,7 @@ Configuration managed via **.env** variables for database connections and CORS o
 ## Roadmap
 [ ] Implement TaskCategory Router, Controller, and Model.
 [ ] Add Priority view logic.
+
+---
+*Developed by Giorgos Den.*
+
