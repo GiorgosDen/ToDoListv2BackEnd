@@ -14,9 +14,9 @@ const taskRouter = require('./routes/taskRouter');
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/login',authRouter);
-app.use('/signUp',userRouter);
 //Middleware
 app.use(verifyAccessToken);
+app.use('/user',userRouter);
 app.use('/tasks',taskRouter);
 
 module.exports = app;

@@ -2,11 +2,51 @@ const taskModel = require('../models/taskModel');
 
 
 /**GET */
+//Get all user tasks 
 const getAllUserTasks = async (req,res)=>{
     try {
         const userID = req.userID;
-        console.log(userID);
+        //console.log(userID);
         const userTasks = await taskModel.getUserTasks(userID);
+        //console.log(userTasks);
+        res.status(200).json({userTasks});   
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Server error"});
+    }
+}
+//Get daily tasks
+const getDailyUserTasks = async (req,res)=>{
+    try {
+        const userID = req.userID;
+        //console.log(userID);
+        const userTasks = await taskModel.getDailyUserTasks(userID);
+        //console.log(userTasks);
+        res.status(200).json({userTasks});   
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Server error"});
+    }
+}
+//Get Weekly tasks
+const getWeeklyUserTasks = async (req,res)=>{
+    try {
+        const userID = req.userID;
+        //console.log(userID);
+        const userTasks = await taskModel.getWeeklyUserTasks(userID);
+        //console.log(userTasks);
+        res.status(200).json({userTasks});   
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Server error"});
+    }
+}
+//Get Monthly tasks
+const getMonthlyUserTasks = async (req,res)=>{
+    try {
+        const userID = req.userID;
+        //console.log(userID);
+        const userTasks = await taskModel.getMonthlyUserTasks(userID);
         //console.log(userTasks);
         res.status(200).json({userTasks});   
     } catch (error) {
@@ -104,6 +144,9 @@ const updateTaskInfobyID = async (req,res)=>{
 
 module.exports ={
     getAllUserTasks,
+    getDailyUserTasks,
+    getWeeklyUserTasks,
+    getMonthlyUserTasks,
     createNewTask,
     deleteTaskByID,
     updateTaskStateByID,
