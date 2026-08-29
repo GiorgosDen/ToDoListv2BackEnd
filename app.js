@@ -4,6 +4,7 @@ const app = express();
 
 //import cors options
 const corsOptions = require('./config/corsOptions');
+const cookieParser = require('cookie-parser');
 //import middleware
 const verifyAccessToken = require('./middleware/verifyAccessToken');
 //import routers
@@ -13,6 +14,7 @@ const taskRouter = require('./routes/taskRouter');
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 app.use('/login',authRouter);
 //Middleware
 app.use(verifyAccessToken);

@@ -29,12 +29,14 @@ const authController = async (req,res)=>{
                 process.env.ACCESS_TOKEN_SECRET, 
                 {expiresIn: "1h"}
             );
-            //Send token and user name
-            res.status(200).json({
+            //Send token with cookie and user name as JSON
+            res.cookie("JWToken",accessToken,{
+                httpOnly:true,
+                secure:false //Http for now
+            }).status(200).json({
                 message:"User login success",
-                accessToken,
                 name:fullName
-            })
+            });
 
         }else{
             res.status(401).json({message:"Invalid email or password"});
@@ -45,4 +47,15 @@ const authController = async (req,res)=>{
     }
 };
 
-module.exports = {authController};
+//Log Out (cleare cookie)
+const logOutUser = async(req,res)=>{
+    res.clearCookie('JWToken', {
+    httpOnly: true,
+    secure: false,
+  }).send({ success: true });
+}
+
+module.exports = {
+    authController,
+    logOutUser
+};
