@@ -6,7 +6,7 @@ A REST API built with Node.js and following the MVC (Model-View-Controller) arch
 ## Tech Stack
 * **Runtime:** Node.js
 * **Framework:** Express.js
-* **Security:** bcrypt (password hashing), JSON Web Tokens (JWT) for authorization
+* **Security:** bcrypt (password hashing), JSON Web Tokens (JWT) for authorization, HttpOnly cookie for access to JWT.
 * **API Testing:** Thunder Client
 
 ---
@@ -14,6 +14,7 @@ A REST API built with Node.js and following the MVC (Model-View-Controller) arch
 ## Security & Architecture
 * **Password Hashing:** User passwords are securely hashed using the bcrypt library.
 * **Token-Based Auth:** JSON Web Tokens (JWT) are used for user authorization to protect routes and manage user data.
+* **HttpOnly Cookie:** Safe storage and access to JWTs.
 * **Unique Identifiers:** User emails and IDs are strictly enforced as unique identifiers.
 
 ---
