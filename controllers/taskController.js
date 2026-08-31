@@ -55,6 +55,17 @@ const getMonthlyUserTasks = async (req,res)=>{
     }
 }
 
+const getTaskByID = async(req,res)=>{
+    try {
+        const taskId = req.params.id;
+        const userTask = await taskModel.getTaskByID(taskId);
+        res.status(200).json({userTask});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Server error"});
+    }
+}
+
 /**POST */
 const createNewTask = async(req,res)=>{
     try {
@@ -147,6 +158,7 @@ module.exports ={
     getDailyUserTasks,
     getWeeklyUserTasks,
     getMonthlyUserTasks,
+    getTaskByID,
     createNewTask,
     deleteTaskByID,
     updateTaskStateByID,

@@ -8,6 +8,7 @@ router.get('/',verifyAccessToken,taskController.getAllUserTasks);
 router.get('/day',verifyAccessToken,taskController.getDailyUserTasks);
 router.get('/week',verifyAccessToken,taskController.getWeeklyUserTasks);
 router.get('/month',verifyAccessToken,taskController.getMonthlyUserTasks);
+router.get('/:id',verifyAccessToken,taskController.getTaskByID);
 router.post('/',verifyAccessToken,taskController.createNewTask);
 router.delete('/:id',verifyAccessToken,taskController.deleteTaskByID);
 router.patch('/',verifyAccessToken,taskController.updateExpiredTasks);

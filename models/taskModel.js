@@ -26,6 +26,12 @@ const taskModel = {
         const [tasks] = await dbCon.query(query,[userID]);
         return tasks?tasks:[];
     },
+    //Get a Task data by ID
+    async getTaskByID(taskID){
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE t.id=?;";
+        const [task] = await dbCon.query(query,[taskID]);
+        return task?task:[];
+    },
     //create new task (taskData is a list)
     async createNewTask(userID,taskData){
         const {name,taskDescription,DateTime,category,state,priority,reminder,repeat} = taskData; //export tasks data

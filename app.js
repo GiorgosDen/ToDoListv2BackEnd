@@ -11,6 +11,7 @@ const verifyAccessToken = require('./middleware/verifyAccessToken');
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 const taskRouter = require('./routes/taskRouter');
+const taskCategoryRouter = require('./routes/taskCategoryRouter');
 
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -20,5 +21,6 @@ app.use('/login',authRouter);
 app.use(verifyAccessToken);
 app.use('/user',userRouter);
 app.use('/tasks',taskRouter);
+app.use('/taskCategories',taskCategoryRouter);
 
 module.exports = app;
