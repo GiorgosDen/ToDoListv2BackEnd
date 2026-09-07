@@ -9,6 +9,7 @@ const verifyAccessToken = async (req,res,next)=>{
     jwt.verify(userToken,
         process.env.ACCESS_TOKEN_SECRET,
     (error,decodes)=>{
+        console.log(error);
         if(error) return res.status(403).json({ message:"Forbidden Token"});
         req.userID = decodes.userID;
        // console.log(decodes);

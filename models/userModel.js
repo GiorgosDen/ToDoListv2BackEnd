@@ -2,14 +2,14 @@ const dbCon =  require('../config/db');
 
 const userModel = {
     async findByEmail(userEmail){
-        const query = "SELECT * FROM user WHERE email=?;";
+        const query = "SELECT * FROM user WHERE email=? AND verified=1;";
         const [users] = await dbCon.query(query,[userEmail]);
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined
     },
     //Find the user by id (for updating data)
     async findByID(userID){
-        const query = "SELECT * FROM user WHERE id=?;";
+        const query = "SELECT * FROM user WHERE id=? AND verified=1;";
         const [users] = await dbCon.query(query,[userID]);
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined
@@ -22,9 +22,19 @@ const userModel = {
             //If doesn't exists
             const query = "INSERT INTO user (fullName,email,password) VALUES (?,?,?)";
             const [result] = await dbCon.query(query,[fullName,email,hashPassword]);
-            return result.affectedRows;
+            return result.insertId;//Get new user id
         }
         return 0;//If the email is not availiable
+    },
+    //Verify user with by ID
+    async verifyUserByID(userID){
+        const existedUser =  await this.findByID(userID);
+        if(existedUser){
+            const query = "UPDATE user SET verified=1 WHERE id=?;";
+            const [result] = await dbCon.query(query,[userID]);
+            return result.affectedRows;
+        }   
+        return 0;
     },
     //Get user's data
     async getUserDataByID(userID){

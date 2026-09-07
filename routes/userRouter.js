@@ -5,8 +5,6 @@ const userContoller =  require('../controllers/userController');
 //middleware
 const verifyAccessToken = require('../middleware/verifyAccessToken');
 
-//Sign Up new user
-router.post('/',userContoller.signUp);
 //Update user data
 router.put('/',verifyAccessToken,userContoller.updateUserData);
 //Deregistered user

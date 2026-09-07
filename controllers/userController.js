@@ -17,25 +17,6 @@ const taskModel = require('../models/taskModel');
  *  password: ******
  * }
 */
-const signUp = async (req,res)=>{
-    try {
-        //Hash the password 
-        const salt = 10;
-        const hashPassword = await bcrypt.hash(req.body.password,salt);
-        //Create new record
-        const affectedTableRows = await userModel.createUser(req.body.fullName,req.body.email,hashPassword);
-        //Check record
-        if(affectedTableRows===1){
-            res.status(201).json({message:"A new User Signs Up"});
-        }else{
-            //Conflict 
-            res.status(409).json({message:"Email is already used"});
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:"Server error"});
-    }
-}
 
 //Update user data
 const updateUserData = async(req,res)=>{
@@ -84,7 +65,6 @@ const deregisteredUser = async (req,res)=>{
 }
 
 module.exports ={
-    signUp,
     updateUserData,
     deregisteredUser
 }

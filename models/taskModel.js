@@ -12,6 +12,7 @@ const taskModel = {
     async getDailyUserTasks(userID){
         const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE DateTime >= CURDATE() AND DateTime < (CURDATE() + INTERVAL 1 DAY) AND t.UserID=?;";
         const [tasks] = await dbCon.query(query,[userID]);
+        //console.log(`Tasks From BACK: ${tasks}`);
         return tasks?tasks:[];
     },
     //Return weekly User tasks
@@ -35,8 +36,9 @@ const taskModel = {
     //create new task (taskData is a list)
     async createNewTask(userID,taskData){
         const {name,taskDescription,DateTime,category,state,priority,reminder,repeat} = taskData; //export tasks data
+        const correctDateTime  = new Date(DateTime+'Z');
         const query = "INSERT INTO task (`Name`,`Description`,`DateTime`,`Category`,`State`,`Priority`,`Reminder`,`Repeat`,`UserID`) VALUES (?,?,?,?,?,?,?,?,?);"
-        const [result] = await dbCon.query(query,[name,taskDescription,DateTime,category,state,priority,reminder,repeat,userID]);
+        const [result] = await dbCon.query(query,[name,taskDescription,correctDateTime,category,state,priority,reminder,repeat,userID]);
         return result.affectedRows;
     },
     //delete a specific task

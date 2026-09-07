@@ -16,7 +16,9 @@ const taskCategoryRouter = require('./routes/taskCategoryRouter');
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use('/login',authRouter);
+app.use(express.static('public'));
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.use('/auth',authRouter);
 //Middleware
 app.use(verifyAccessToken);
 app.use('/user',userRouter);

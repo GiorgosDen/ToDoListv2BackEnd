@@ -5,6 +5,8 @@ require('dotenv').config();
 
 //userModel
 const userModel =  require('../models/userModel');
+//service
+const emailService = require('../services/emailService');
 
 const authController = async (req,res)=>{
     try {
@@ -46,7 +48,52 @@ const authController = async (req,res)=>{
         res.status(500).json({message:"Server Error"});
     }
 };
+//Send verification email to sign up
+const sendVerficationEmail =async (req,res)=>{
+    try {
+        const {fullName,email, password} = req.body;
+        //Hash the password 
+        const salt = 10;
+        const hashPassword = await bcrypt.hash(password,salt);
+        const newUserID = await userModel.createUser(fullName,email,hashPassword);
+        if(newUserID>0){
+            //Call Email service
+            const sendEmail = await emailService.sendVerificationEmail(newUserID,fullName,email);
+            if(!sendEmail){
+                return res.status(500).json({message:"Create user but transport verification email failed"});
+            }
+            res.status(201).json({message:"Send the verification email"});
+        }else{
+            res.status(409).json({message:"This email already used"});
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Error during sending ver email"});
+    }
 
+}
+
+//Verify the new user (uses url token to gets the user ID)
+const completedSignUp = async(req,res)=>{
+    try {
+        const token = req.params.token;
+        let userID = 0;
+        jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,
+            (error,decodes) =>{
+                if(error){
+                    console.log(error);
+                    res.status(403).json({message:"Email verification failed...forbidden token"});
+                }
+                userID = decodes.userID;
+            }
+        )
+        const affectedRows = await userModel.verifyUserByID(userID);
+        if(affectedRows>0) res.redirect(process.env.CLIENT_URL);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"server error"})
+    }
+}
 //Log Out (cleare cookie)
 const logOutUser = async(req,res)=>{
     res.clearCookie('JWToken', {
@@ -57,5 +104,7 @@ const logOutUser = async(req,res)=>{
 
 module.exports = {
     authController,
+    sendVerficationEmail,
+    completedSignUp,
     logOutUser
 };
