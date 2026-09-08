@@ -10,20 +10,26 @@ const taskModel = {
     },
     //Return daily User tasks
     async getDailyUserTasks(userID){
-        const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE DateTime >= CURDATE() AND DateTime < (CURDATE() + INTERVAL 1 DAY) AND t.UserID=?;";
+        const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE DateTime >= UNIX_TIMESTAMP(CURDATE()) AND DateTime < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY) AND t.UserID=?;";
         const [tasks] = await dbCon.query(query,[userID]);
         //console.log(`Tasks From BACK: ${tasks}`);
         return tasks?tasks:[];
     },
     //Return weekly User tasks
     async getWeeklyUserTasks(userID){
-        const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE DateTime >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AND DateTime < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 DAY) AND UserID=?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c ON c.id = t.Category JOIN taskPriority as p ON p.id = t.Priority WHERE FROM_UNIXTIME(t.DateTime) >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AND FROM_UNIXTIME(t.DateTime) < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 DAY) AND UserID = ?;";
         const [tasks] = await dbCon.query(query,[userID]);
         return tasks?tasks:[];
     },
     //Return monthly User tasks
     async getMonthlyUserTasks(userID){
-        const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE DateTime >= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND DateTime < DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND UserID=?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c ON c.id = t.Category JOIN taskPriority as p ON p.id = t.Priority WHERE FROM_UNIXTIME(t.DateTime) >= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND FROM_UNIXTIME(t.DateTime) < DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND UserID = ?;";
+        const [tasks] = await dbCon.query(query,[userID]);
+        return tasks?tasks:[];
+    },
+    //Get All completed user tasks
+    async getAllCompletedUserTasks(userID){
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE State=3 AND t.UserID=?;";
         const [tasks] = await dbCon.query(query,[userID]);
         return tasks?tasks:[];
     },
@@ -36,9 +42,8 @@ const taskModel = {
     //create new task (taskData is a list)
     async createNewTask(userID,taskData){
         const {name,taskDescription,DateTime,category,state,priority,reminder,repeat} = taskData; //export tasks data
-        const correctDateTime  = new Date(DateTime+'Z');
         const query = "INSERT INTO task (`Name`,`Description`,`DateTime`,`Category`,`State`,`Priority`,`Reminder`,`Repeat`,`UserID`) VALUES (?,?,?,?,?,?,?,?,?);"
-        const [result] = await dbCon.query(query,[name,taskDescription,correctDateTime,category,state,priority,reminder,repeat,userID]);
+        const [result] = await dbCon.query(query,[name,taskDescription,DateTime,category,state,priority,reminder,repeat,userID]);
         return result.affectedRows;
     },
     //delete a specific task
@@ -73,7 +78,7 @@ const taskModel = {
         return 0;
     },
     async updateExpiredTasks(){
-        const query = "UPDATE task SET State=2 WHERE DateTime<now();";
+        const query = "UPDATE task SET State=2 WHERE DateTime<UNIX_TIMESTAMP(now()) AND State!=3;";
         const [result] = await dbCon.query(query);
         return result.changedRows;//How many records had updated
     },

@@ -62,10 +62,21 @@ const getTaskByID = async(req,res)=>{
         res.status(200).json({userTask});
     } catch (error) {
         console.log(error);
-        res.status(500).json({message:"Server error"});
+        res.status(500).json({message:"Server error (getTaskByID"});
     }
 }
 
+//Get All completed user tasks
+const getCompletedUserTasks= async(req,res)=>{
+    try {
+        const userID = req.userID;
+        const userTasks = await taskModel.getAllCompletedUserTasks(userID);
+        res.status(200).json({userTasks});  
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"Server error (while getting completed tasks"});
+    }
+}
 /**POST */
 const createNewTask = async(req,res)=>{
     try {
@@ -159,6 +170,7 @@ module.exports ={
     getWeeklyUserTasks,
     getMonthlyUserTasks,
     getTaskByID,
+    getCompletedUserTasks,
     createNewTask,
     deleteTaskByID,
     updateTaskStateByID,
