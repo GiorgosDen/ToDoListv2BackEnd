@@ -1,6 +1,12 @@
 const dbCon =  require('../config/db');
 
 const userModel = {
+    async findEmailAvailiability(userEmail){
+        const query = "SELECT * FROM user WHERE email=?;";
+        const [users] = await dbCon.query(query,[userEmail]);
+        if(users[0])return false;
+        return true;
+    },
     async findByEmail(userEmail){
         const query = "SELECT * FROM user WHERE email=? AND verified=1;";
         const [users] = await dbCon.query(query,[userEmail]);
@@ -46,21 +52,33 @@ const userModel = {
     async updateUser(fullName,email,hashPassword,userID){
         //check if user with this id exists and take the data
         const existedUser = await this.getUserDataByID(userID);
-        if(existedUser){
-            //check if email is availiable (in case that user wants to update the email)
-            const existedUserByEmail = await this.findByEmail(email);
-            //if user wants update the email OR not
-            //(email!=existedUser[2] && !existedUserByEmail) || (email==existedUser[2])
-            if(!existedUserByEmail || email==existedUser[2]){
-                //if user with id exist and the email is availiable
-                const query = "UPDATE user SET fullName=? ,email=? ,password=? WHERE id=?";
-                const [result] = await dbCon.query(query,[fullName,email,hashPassword,userID]);
-                return result.affectedRows;
-            }else 
-                //The user wants update the email but the new email is not availiable
-                return -1;
-            }
+        if(!existedUser){
             return 0;//If user not found
+        }
+        if(email && email==existedUser.email){
+            return -1;//unavailiable email
+        }
+        
+        const fields = [];
+        const variables = [];
+
+        if(fullName!==""){
+            fields.push("fullName=?");
+            variables.push(fullName);
+        }
+        if(email!=""){
+            fields.push("email=?");
+            variables.push(email);
+        }
+        if(hashPassword!=""){
+            fields.push("password=?");
+            variables.push(hashPassword);
+        }
+        variables.push(userID);
+        const query = `UPDATE user SET ${fields.join(", ")} WHERE id=?;`;
+        const [rows] = await dbCon.query(query,variables);
+        return rows.affectedRows;
+            
     },
     async deleteUser(userID){
         //Check if user exists

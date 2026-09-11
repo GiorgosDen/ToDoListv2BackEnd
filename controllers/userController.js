@@ -23,9 +23,12 @@ const updateUserData = async(req,res)=>{
     try {
         //Get user id
         const userId = req.userID;
-        //Hash the password 
+        //Hash the password (if exists)
         const salt = 10;
-        const hashPassword = await bcrypt.hash(req.body.password,salt);
+        let hashPassword
+        if(req.body.password!==''){
+            hashPassword = await bcrypt.hash(req.body.password,salt);
+        }
         //Create new record
         const affectedTableRows = await userModel.updateUser(req.body.fullName,req.body.email,hashPassword,userId);
         //Check record

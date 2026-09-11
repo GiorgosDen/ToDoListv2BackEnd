@@ -52,6 +52,11 @@ const authController = async (req,res)=>{
 const sendVerficationEmail =async (req,res)=>{
     try {
         const {fullName,email, password} = req.body;
+        //Check if email already used
+        const emailAvailiable = await userModel.findEmailAvailiability(email);
+        if(!emailAvailiable){
+            return res.status(409).json({message:"The email already used"});
+        }
         //Hash the password 
         const salt = 10;
         const hashPassword = await bcrypt.hash(password,salt);
