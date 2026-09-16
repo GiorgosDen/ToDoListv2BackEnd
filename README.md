@@ -2,6 +2,12 @@
 A REST API built with Node.js and following the MVC (Model-View-Controller) architecture. This backend serves as a core component of the Full-Stack [ToDoList v2 App](https://github.com/GiorgosDen/ToDOListv2).
 
 ---
+| Part Name | Link | Tech Stack |
+| :--- | :--- | :--- |
+| **Front-End App** | [View Repo](https://github.com/GiorgosDen/ToDoListv2FrontEnd) | React, TailwindCSS |
+| **Back-End API** | `this repo` | Node.js,Express,MySQL |
+
+---
 
 ## Tech Stack
 * **Runtime:** Node.js
