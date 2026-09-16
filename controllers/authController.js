@@ -32,7 +32,7 @@ const authController = async (req,res)=>{
                 {expiresIn: "1h"}
             );
             //Send token with cookie and user name as JSON
-            res.cookie("JWToken",accessToken,{
+            return res.cookie("JWToken",accessToken,{
                 httpOnly:true,
                 secure:false //Http for now
             }).status(200).json({
@@ -41,11 +41,11 @@ const authController = async (req,res)=>{
             });
 
         }else{
-            res.status(401).json({message:"Invalid email or password"});
+            return res.status(401).json({message:"Invalid email or password"});
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({message:"Server Error"});
+        return res.status(500).json({message:"Server Error"});
     }
 };
 //Send verification email to sign up
@@ -67,13 +67,13 @@ const sendVerficationEmail =async (req,res)=>{
             if(!sendEmail){
                 return res.status(500).json({message:"Create user but transport verification email failed"});
             }
-            res.status(201).json({message:"Send the verification email"});
+            return res.status(201).json({message:"Send the verification email"});
         }else{
-            res.status(409).json({message:"This email already used"});
+            return res.status(409).json({message:"This email already used"});
         }
     } catch (error) {
         console.log(error);
-        res.status(500).json({message:"Error during sending ver email"});
+        return res.status(500).json({message:"Error during sending ver email"});
     }
 
 }
@@ -87,16 +87,16 @@ const completedSignUp = async(req,res)=>{
             (error,decodes) =>{
                 if(error){
                     console.log(error);
-                    res.status(403).json({message:"Email verification failed...forbidden token"});
+                    return res.status(403).json({message:"Email verification failed...forbidden token"});
                 }
                 userID = decodes.userID;
             }
         )
         const affectedRows = await userModel.verifyUserByID(userID);
-        if(affectedRows>0) res.redirect(process.env.CLIENT_URL);
+        if(affectedRows>0) return res.redirect(process.env.CLIENT_URL);
     } catch (error) {
         console.log(error);
-        res.status(500).json({message:"server error"})
+        return res.status(500).json({message:"server error"})
     }
 }
 //Log Out (cleare cookie)

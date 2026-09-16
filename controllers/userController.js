@@ -33,13 +33,13 @@ const updateUserData = async(req,res)=>{
         const affectedTableRows = await userModel.updateUser(req.body.fullName,req.body.email,hashPassword,userId);
         //Check record
         if(affectedTableRows===1){
-            res.status(201).json({message:`Update user with ID:${userId}`});
+            return res.status(201).json({message:`Update user with ID:${userId}`});
         }else if(affectedTableRows===-1){
             //email is not availiable
-            res.status(409).json({message:`Email:${req.body.email} is not availiable`});
+            return res.status(409).json({message:`Email:${req.body.email} is not availiable`});
         }else{
             //User Not found 
-            res.status(404).json({message:`User with ID:${userId} not found`});
+            return res.status(404).json({message:`User with ID:${userId} not found`});
         }
     } catch (error) {
         console.log(error);
@@ -56,10 +56,10 @@ const deregisteredUser = async (req,res)=>{
         //Delete user 
         const affectedRows = await userModel.deleteUser(userId);
         if(affectedRows===1){
-            res.status(201).json({message:`Success deregitered user with id:${userId}`});
+            return res.status(201).json({message:`Success deregitered user with id:${userId}`});
         }else{
             //Not found 
-            res.status(404).json({message:`User with id:${userId} not found`});
+            return res.status(404).json({message:`User with id:${userId} not found`});
         }
     } catch (error) {
         console.log(error);
