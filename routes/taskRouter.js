@@ -4,7 +4,7 @@ const router = express.Router();
 const verifyAccessToken = require('../middleware/verifyAccessToken');
 const taskController = require('../controllers/taskController');
 
-router.get('/',verifyAccessToken,taskController.getAllUserTasks);
+router.get('/all',verifyAccessToken,taskController.getAllUserTasks);
 router.get('/day',verifyAccessToken,taskController.getDailyUserTasks);
 router.get('/week',verifyAccessToken,taskController.getWeeklyUserTasks);
 router.get('/month',verifyAccessToken,taskController.getMonthlyUserTasks);

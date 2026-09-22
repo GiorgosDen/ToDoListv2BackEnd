@@ -6,6 +6,7 @@ const taskCategoryController = require('../controllers/taskCategoryController');
 
 app.get('/',verifyJWT,taskCategoryController.getTaskCategories);
 app.post('/',verifyJWT,taskCategoryController.createTaskCategory);
+app.put('/:id',verifyJWT,taskCategoryController.updateTaskCategory);
 app.delete('/:id',verifyJWT,taskCategoryController.deleteTaskCategory);
 
 module.exports= app;

@@ -2,15 +2,15 @@ const dbCon = require('../config/db');
 const userModel  = require('../models/userModel');
 
 const taskCategoryModel ={
-    async findCategoryByName(catName,userID){
+    async findCategoryByName(userID,catName){
         //Returns true/false if category exists
         const query = "SELECT * From taskcategory WHERE creatorID=? AND Name=?;";
         const result = await dbCon.query(query,[userID,catName]);
-        return result[0]?true:false;
+        //console.log(userID,catName,result[0].length>0,result[0].length>0?true:false);
+        return result[0].length>0;
     },
-    async findCategoryByID(catID,userID){
+    async findCategoryByID(userID,catID){
         //Returns true/false if category exists
-        console.log(catID,userID);
         const query = "SELECT * From taskcategory WHERE creatorID=? AND id=?;";
         const result = await dbCon.query(query,[userID,catID]);
         return result[0].length>0?true:false;
@@ -28,8 +28,20 @@ const taskCategoryModel ={
         const results = await dbCon.query(query,[name,description,colorRGB,userID]);
         return results[0];
     },
+    async updateTaskCategory(catID,catData){
+        const {name,description,colorRGB} = catData;
+        const query = "UPDATE taskcategory SET Name=? ,Description=? ,ColorRGB=? WHERE id=?;";
+        const results = await dbCon.query(query,[name,description,colorRGB,catID]);
+        return results[0];
+    },
     async deleteTaskCategory(catID){
         const query = "DELETE FROM taskcategory WHERE id=?;";
+        const results = await dbCon.query(query,[catID]);
+        return results[0];
+    },
+    async handleDeletedCategoryTasks(catID){
+        //Set tasks with Category=catID as Others (id=5)
+        const query = "UPDATE task SET Category=5 WHERE Category=?;";
         const results = await dbCon.query(query,[catID]);
         return results[0];
     }
