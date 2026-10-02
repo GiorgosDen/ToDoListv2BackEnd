@@ -11,10 +11,7 @@ const taskSceduler = require('./services/taskScheduler');
 //Create HTTP1 server
 const serverHTTP1 = http.createServer(app);
 const io = new Server(serverHTTP1,{ 
-    cors: { 
-        origin: corsOptions.origin,
-        credentials: true 
-    }
+    cors: corsOptions
  });
 //Start the app, after checking db connection
 const startServer = async ()=>{
