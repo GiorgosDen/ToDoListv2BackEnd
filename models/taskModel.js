@@ -3,39 +3,39 @@ const dbCon = require('../config/db');
 const taskModel = {
     //Return all user tasks (with Category and Priority names)
     async getUserTasks(userID){
-        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE t.UserID=?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskpriority as p ON c.id=t.Category AND p.id=t.priority WHERE t.UserID=?;";
         const [tasks] = await dbCon.query(query,[userID]);
         //console.log(tasks);
         return tasks?tasks:[];
     },
     //Return daily User tasks
     async getDailyUserTasks(userID){
-        const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE DateTime >= UNIX_TIMESTAMP(CURDATE()) AND DateTime < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY) AND t.UserID=?;";
+        const query = "SELECT t.*,c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskpriority as p ON c.id=t.Category AND p.id=t.priority WHERE DateTime >= UNIX_TIMESTAMP(CURDATE()) AND DateTime < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY) AND t.UserID=?;";
         const [tasks] = await dbCon.query(query,[userID]);
         //console.log(`Tasks From BACK: ${tasks}`);
         return tasks?tasks:[];
     },
     //Return weekly User tasks
     async getWeeklyUserTasks(userID){
-        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c ON c.id = t.Category JOIN taskPriority as p ON p.id = t.Priority WHERE FROM_UNIXTIME(t.DateTime) >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AND FROM_UNIXTIME(t.DateTime) < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 DAY) AND UserID = ?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c ON c.id = t.Category JOIN taskpriority as p ON p.id = t.priority WHERE FROM_UNIXTIME(t.DateTime) >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AND FROM_UNIXTIME(t.DateTime) < DATE_ADD(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 7 DAY) AND UserID = ?;";
         const [tasks] = await dbCon.query(query,[userID]);
         return tasks?tasks:[];
     },
     //Return monthly User tasks
     async getMonthlyUserTasks(userID){
-        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c ON c.id = t.Category JOIN taskPriority as p ON p.id = t.Priority WHERE FROM_UNIXTIME(t.DateTime) >= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND FROM_UNIXTIME(t.DateTime) < DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND UserID = ?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c ON c.id = t.Category JOIN taskpriority as p ON p.id = t.priority WHERE FROM_UNIXTIME(t.DateTime) >= DATE_FORMAT(CURDATE(), '%Y-%m-01') AND FROM_UNIXTIME(t.DateTime) < DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND UserID = ?;";
         const [tasks] = await dbCon.query(query,[userID]);
         return tasks?tasks:[];
     },
     //Get All completed user tasks
     async getAllCompletedUserTasks(userID){
-        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE State=3 AND t.UserID=?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskpriority as p ON c.id=t.Category AND p.id=t.priority WHERE State=3 AND t.UserID=?;";
         const [tasks] = await dbCon.query(query,[userID]);
         return tasks?tasks:[];
     },
     //Get a Task data by ID
     async getTaskByID(taskID){
-        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskPriority as p ON c.id=t.Category AND p.id=t.Priority WHERE t.id=?;";
+        const query = "SELECT t.*, c.Name as CatName, p.Name as PrName FROM task as t JOIN taskcategory as c JOIN taskpriority as p ON c.id=t.Category AND p.id=t.priority WHERE t.id=?;";
         const [task] = await dbCon.query(query,[taskID]);
         return task?task:[];
     },
