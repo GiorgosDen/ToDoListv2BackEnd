@@ -4,14 +4,15 @@ const userModel  = require('../models/userModel');
 const taskCategoryModel ={
     async findCategoryByName(userID,catName){
         //Returns true/false if category exists
-        const query = "SELECT * From taskcategory WHERE creatorID=? AND Name=?;";
+        const query = "SELECT * From taskcategory WHERE (creatorID=? OR creatorID IS NULL) AND Name=?;";
         const result = await dbCon.query(query,[userID,catName]);
         //console.log(userID,catName,result[0].length>0,result[0].length>0?true:false);
-        return result[0].length>0;
+        console.log(result[0]);
+        return result[0].length>0?true:false;
     },
     async findCategoryByID(userID,catID){
         //Returns true/false if category exists
-        const query = "SELECT * From taskcategory WHERE creatorID=? AND id=?;";
+        const query = "SELECT * From taskcategory WHERE (creatorID=? OR creatorID IS NULL) AND id=?;";
         const result = await dbCon.query(query,[userID,catID]);
         return result[0].length>0?true:false;
     },
