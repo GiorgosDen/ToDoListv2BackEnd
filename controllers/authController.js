@@ -34,7 +34,8 @@ const authController = async (req,res)=>{
             //Send token with cookie and user name as JSON
             return res.cookie("JWToken",accessToken,{
                 httpOnly:true,
-                secure:false //Http for now
+                secure:true,
+                sameSite:'none'
             }).status(200).json({
                 message:"User login success",
                 name:fullName
@@ -103,7 +104,8 @@ const completedSignUp = async(req,res)=>{
 const logOutUser = async(req,res)=>{
     res.clearCookie('JWToken', {
     httpOnly: true,
-    secure: false,
+    secure: true,
+    sameSite: 'none'
   }).send({ success: true });
 }
 

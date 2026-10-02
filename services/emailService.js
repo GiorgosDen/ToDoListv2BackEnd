@@ -28,7 +28,7 @@ const sendVerificationEmail = async(newUserID,fullName,email)=>{
             to: email,
             subject: 'Email Verification (ToDoListApp v2)',
             html:`Hi ${fullName}! <br>
-                Thanks for signing up for ToDoListApp v2! Please click the link below to verify your email address and activate your account: ${process.env.API_URL}/auth/verify/${verifyToken}<br>
+                Thanks for signing up for ToDoListApp v2! Please click the link below to verify your email address and activate your account: ${process.env.FRONT_URL}/auth/verify/${verifyToken}<br>
                 This link will expire in 15 minutes. If you didn't create an account with us, you can safely ignore this email.<br>
                 Best regards, 
                 <br> The ToDoListApp Team`
