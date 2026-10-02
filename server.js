@@ -4,12 +4,18 @@ const dbConnection = require('./config/db');
 const http = require('http');
 const {Server} = require('socket.io');
 const port = process.env.PORT || 3000;
+const corsOptions = require('./config/corsOptions');
 
 const taskSceduler = require('./services/taskScheduler');
 
 //Create HTTP1 server
 const serverHTTP1 = http.createServer(app);
-const io = new Server(serverHTTP1,{ cors: { origin: "*" } });
+const io = new Server(serverHTTP1,{ 
+    cors: { 
+        origin: corsOptions.origin,
+        credentials: true 
+    }
+ });
 //Start the app, after checking db connection
 const startServer = async ()=>{
     try {
