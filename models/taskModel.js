@@ -71,7 +71,7 @@ const taskModel = {
         const [task] = await dbCon.query(query,[taskID]);
         if(task){
             //State=3 means Completed
-            query = "UPDATE todolist.task SET State = 3 WHERE id=?;";
+            query = "UPDATE task SET State = 3 WHERE id=?;";
             const [result] = await dbCon.query(query,[taskID]);
             return result.affectedRows;
         }
