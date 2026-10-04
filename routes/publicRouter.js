@@ -2,8 +2,8 @@
 const express = require('express');
 const app = express.Router();
 
-app.get('/health',(res,req)=>{
-    res.statusCode(200).json({message:"Ok"});
+app.get('/health',(req,res)=>{
+    res.status(200).json({message:"Ok"});
 });
 
 module.exports = app;
