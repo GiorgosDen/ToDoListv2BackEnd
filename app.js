@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 //import middleware
 const verifyAccessToken = require('./middleware/verifyAccessToken');
 //import routers
+const publicRouter = require('./routes/publicRouter');
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
 const taskRouter = require('./routes/taskRouter');
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('public'));
 app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.use('/public',publicRouter);
 app.use('/auth',authRouter);
 //Middleware
 app.use(verifyAccessToken);
