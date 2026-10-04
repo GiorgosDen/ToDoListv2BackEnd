@@ -22,7 +22,6 @@ const authController = async (req,res)=>{
         //console.log(logedUser);
         const {id,fullName,email,password} = logedUser;
         //Check the password 
-        //let hashPass = await bcrypt.hash(logedUser.password,10);//Tha vgei otan apothikeutei o xristis me hashpassword
         const passwordMaches = await bcrypt.compare(importedPassword,password);
         if(passwordMaches){
            //Create user's access token

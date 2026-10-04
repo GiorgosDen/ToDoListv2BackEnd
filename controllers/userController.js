@@ -23,14 +23,18 @@ const updateUserData = async(req,res)=>{
     try {
         //Get user id
         const userId = req.userID;
+        const updatedUserData = {
+            fullName: req.body.fullName,
+            email: req.body.email,
+            password: req.body.password
+        }
         //Hash the password (if exists)
         const salt = 10;
-        let hashPassword
-        if(req.body.password!==''){
-            hashPassword = await bcrypt.hash(req.body.password,salt);
+        if(updatedUserData.password && updatedUserData.password.trim()!==''){
+            updatedUserData.password = await bcrypt.hash(req.body.password,salt);
         }
         //Create new record
-        const affectedTableRows = await userModel.updateUser(req.body.fullName,req.body.email,hashPassword,userId);
+        const affectedTableRows = await userModel.updateUser(updatedUserData.fullName,updatedUserData.email,updatedUserData.password,userId);
         //Check record
         if(affectedTableRows===1){
             return res.status(201).json({message:`Update user with ID:${userId}`});
