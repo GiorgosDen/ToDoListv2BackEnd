@@ -18,6 +18,25 @@ const taskModel = require('../models/taskModel');
  * }
 */
 
+//Get user's email and fullname
+const getUserData = async(req,res)=>{
+    try {
+        const userId = req.userID;
+        const data = await userModel.findByID(userId);
+        if(data){
+            return res.status(200).json({
+                fullName: data.fullName,
+                email: data.email
+            });
+        }else{
+            return res.status(404).json({message:"User Not Found"});
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"Server error during get User email and password"});
+    }
+}
+
 //Update user data
 const updateUserData = async(req,res)=>{
     try {
@@ -72,5 +91,6 @@ const deregisteredUser = async (req,res)=>{
 
 module.exports ={
     updateUserData,
-    deregisteredUser
+    deregisteredUser,
+    getUserData
 }
