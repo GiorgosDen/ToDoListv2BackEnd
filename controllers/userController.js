@@ -52,11 +52,10 @@ const updateUserData = async(req,res)=>{
 }
 
 //Remove user from the system
+//MySQL removes automatically the associate tasks/categories (DELETE CASCADE)
 const deregisteredUser = async (req,res)=>{
     try {
         const userId = req.userID;
-        //Delete user tasks and ?categories?
-        await taskModel.deleteUserTasks(userId);
         //Delete user 
         const affectedRows = await userModel.deleteUser(userId);
         if(affectedRows===1){
