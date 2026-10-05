@@ -84,11 +84,11 @@ const completedSignUp = async(req,res)=>{
         const token = req.params.token;
         const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userID = decodes.userID;
-        const affectedRows = await userModel.verifyUserByID(userID);
+        const affectedRows = await userModel.verifyUserByID(Number(userID));
         if(affectedRows>0){
             return res.redirect(process.env.CLIENT_URL);
         }else {
-            return res.status(404).json({ message: "User not found or already verified." });
+            return res.status(404).json({ message: `User [${userID}] not found or already verified.` });
         }
     } catch (error) {
         console.log(error);
