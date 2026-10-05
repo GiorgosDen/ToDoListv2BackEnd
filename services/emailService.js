@@ -24,7 +24,7 @@ const sendVerificationEmail = async(newUserID,fullName,email)=>{
             {expiresIn:'15m'}
         );
         const mailConfig = {
-            from: process.env.SMTP_NAME,
+            from: process.env.SMTP_PERSONAL_NAME,
             to: email,
             subject: 'Email Verification (ToDoListApp v2)',
             html: `Hi ${fullName}! <br><br>
