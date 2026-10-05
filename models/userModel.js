@@ -2,7 +2,7 @@ const dbCon =  require('../config/db');
 
 const userModel = {
     async findEmailAvailiability(userEmail){
-        const query = "SELECT * FROM user WHERE email=?;";
+        const query = "SELECT * FROM user WHERE email=?; AND verified=1";
         const [users] = await dbCon.query(query,[userEmail]);
         if(users[0])return false;
         return true;
