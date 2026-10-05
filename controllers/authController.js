@@ -86,7 +86,7 @@ const completedSignUp = async(req,res)=>{
         const userID = decodes.userID;
         const affectedRows = await userModel.verifyUserByID(Number(userID));
         if(affectedRows>0){
-            return res.redirect(process.env.CLIENT_URL);
+            return res.redirect(process.env.FRONT_URL);
         }else {
             return res.status(404).json({ message: `User [${userID} | ${affectedRows}] not found or already verified.` });
         }
