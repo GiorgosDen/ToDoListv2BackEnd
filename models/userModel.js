@@ -13,6 +13,13 @@ const userModel = {
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined
     },
+    //Find the unverified user by id (for verified account)
+    async findUnverifiedByID(userID){
+        const query = "SELECT * FROM user WHERE id=? AND verified=0;";
+        const [users] = await dbCon.query(query,[userID]);
+        //console.log(users[0]);
+        return users[0];//A JSON with user's data or a undefined
+    },
     //Find the user by id (for updating data)
     async findByID(userID){
         const query = "SELECT * FROM user WHERE id=? AND verified=1;";
@@ -34,7 +41,7 @@ const userModel = {
     },
     //Verify user with by ID
     async verifyUserByID(userID){
-        const existedUser =  await this.findByID(userID);
+        const existedUser =  await this.findUnverifiedByID(userID);
         if(existedUser){
             const query = "UPDATE user SET verified=1 WHERE id=?;";
             const [result] = await dbCon.query(query,[userID]);
