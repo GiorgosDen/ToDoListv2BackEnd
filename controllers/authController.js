@@ -82,20 +82,19 @@ const sendVerficationEmail =async (req,res)=>{
 const completedSignUp = async(req,res)=>{
     try {
         const token = req.params.token;
-        let userID = 0;
-        jwt.verify(token,process.env.ACCESS_TOKEN_SECRET,
-            (error,decodes) =>{
-                if(error){
-                    console.log(error);
-                    return res.status(403).json({message:"Email verification failed...forbidden token"});
-                }
-                userID = decodes.userID;
-            }
-        )
+        const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const userID = decodes.userID;
         const affectedRows = await userModel.verifyUserByID(userID);
-        if(affectedRows>0) return res.redirect(process.env.CLIENT_URL);
+        if(affectedRows>0){
+            return res.redirect(process.env.CLIENT_URL);
+        }else {
+            return res.status(404).json({ message: "User not found or already verified." });
+        }
     } catch (error) {
         console.log(error);
+        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+            return res.status(403).json({ message: "Verification link is invalid or has expired." });
+        }
         return res.status(500).json({message:"server error"})
     }
 }
