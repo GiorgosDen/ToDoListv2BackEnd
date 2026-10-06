@@ -8,4 +8,4 @@ const verifyAccessToken = require('../middleware/verifyAccessToken');
 router.get('/record',verifyAccessToken,securityController.addNewRecord);
 router.get('/blacklist',verifyAccessToken,securityController.addNewBlackListEmail);
 
-module.exports={router};
+module.exports=router;
