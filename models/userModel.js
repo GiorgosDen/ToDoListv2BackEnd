@@ -58,7 +58,7 @@ const userModel = {
     //Updates non sensitive data
     async updateUserFullName(fullName, userID){
         const existedUser = await this.getUserDataByID(userID);
-        if(existedUser){
+        if(!existedUser){
             return 0;
         }
         if(fullName && fullName!=''){
@@ -70,7 +70,7 @@ const userModel = {
     //Updates Password
     async updateUserPassword(password, userID){
         const existedUser = await this.getUserDataByID(userID);
-        if(existedUser){
+        if(!existedUser){
             return 0;
         }
         if(password && password!=''){
@@ -82,7 +82,7 @@ const userModel = {
     //update user email
     async upadateUserEmail(userID,userEmail){
         const existedUser = await this.getUserDataByID(userID);
-        if(existedUser){
+        if(!existedUser){
             return 0;
         }
         if(userEmail){
