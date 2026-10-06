@@ -44,4 +44,66 @@ const sendVerificationEmail = async(newUserID,fullName,email)=>{
     }
 }
 
-module.exports = {sendVerificationEmail};
+//Pass the userID & new email into the token
+//And sends a email (in <email> address) with verification link [apiCallURL/{token}]
+//Return: True or False
+const sendVerificationEmailtoUpdate = async(fullName,newEmail,verifyToken)=>{
+    try {
+        if(!verifyToken){
+            return false;
+        }
+        const mailConfig = {
+            from: process.env.SMTP_PERSONAL_NAME,
+            to: newEmail,
+            subject: 'Email Update Verification (ToDoListApp v2)',
+            html: `Hi ${fullName}! <br><br>
+               Thanks for using ToDoListApp v2! Please click the link below to verify your new email address: <br>
+                <a href="${process.env.BACK_URL}/user/email/${verifyToken}">Verify My New Email</a><br><br>
+                This link will expire in 15 minutes. If you don't want to update your account email, you can safely ignore this email.<br><br>
+                Best regards, <br> 
+                The ToDoListApp Team`
+        };
+        const info = await transporter.sendMail(mailConfig); 
+        console.log(`Send verification email. Details:${info.messageId}`);
+        return true; 
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+//Pass the user ID into the token
+//And sends a email (in <email> address) to old email 
+//Return: True or False
+const sendVerificationEmailtoInform = async(fullName,oldEmail,newEmail, verifyToken)=>{
+    try {
+        if(!verifyToken){
+            return false;
+        }
+        const mailConfig = {
+            from: process.env.SMTP_PERSONAL_NAME,
+            to: oldEmail,
+            subject: 'Email Update Information (ToDoListApp v2)',
+            html: `Hi ${fullName}! <br><br>
+               Thanks for using ToDoListApp v2! You received an email to verify your account email update to <${newEmail}>. If you don't wish to update your email, please click the link below to cancel. < br>
+                <a href="${process.env.BACK_URL}/user/cancel-email/${verifyToken}">Cancel New Email Verification</a><br><br>
+                This link will expire in 15 minutes. If you want to update your account email, you can safely ignore this email.<br><br>
+                Best regards, <br> 
+                The ToDoListApp Team`
+        };
+        const info = await transporter.sendMail(mailConfig); 
+        console.log(`Send information email. Details:${info.messageId}`);
+        return true; 
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+module.exports = {
+    sendVerificationEmail,
+    sendVerificationEmailtoUpdate,
+    sendVerificationEmailtoInform
+};

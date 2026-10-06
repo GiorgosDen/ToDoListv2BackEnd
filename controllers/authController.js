@@ -35,7 +35,7 @@ const authController = async (req,res)=>{
                 httpOnly:true,
                 secure:true,
                 sameSite:'none'
-            }).status(200).json({
+            }).status(201).json({
                 message:"User login success",
                 name:fullName
             });

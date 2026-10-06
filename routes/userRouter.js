@@ -6,7 +6,15 @@ const userContoller =  require('../controllers/userController');
 const verifyAccessToken = require('../middleware/verifyAccessToken');
 //Get user data
 router.get('/',userContoller.getUserData);
+//Send verification mail
+router.post('/',verifyAccessToken,userContoller.sendVerficationEmails);
+//verify the new email  
+router.get('/email/:token',verifyAccessToken,userContoller.updateEmailAfterVerification);
+//cancel new email verification 
+router.get('/cancel-email/:token',verifyAccessToken,userContoller.cancelUpdateEmailVerification);
 //Update user data
+router.patch('/fullname',verifyAccessToken,userContoller.updateFullName);
+router.patch('/password',verifyAccessToken,userContoller.updatePassword);
 router.put('/',verifyAccessToken,userContoller.updateUserData);
 //Deregistered user
 router.delete('/',verifyAccessToken,userContoller.deregisteredUser);

@@ -55,6 +55,42 @@ const userModel = {
         const existedUser =  await this.findByID(userID);
         return existedUser? existedUser:[];
     },
+    //Updates non sensitive data
+    async updateUserFullName(fullName, userID){
+        const existedUser = await this.getUserDataByID(userID);
+        if(existedUser){
+            return 0;
+        }
+        if(fullName && fullName!=''){
+            const query = 'UPDATE user SET fullName=? WHERE id=?;';
+            const [result] = await dbCon.query(query,[fullName,userID]);
+            return result.affectedRows;
+        }
+    },
+    //Updates Password
+    async updateUserPassword(password, userID){
+        const existedUser = await this.getUserDataByID(userID);
+        if(existedUser){
+            return 0;
+        }
+        if(password){
+            const query = 'UPDATE user SET password=? WHERE id=?;';
+            const [result] = await dbCon.query(query,[fullName,userID]);
+            return result.affectedRows;
+        }
+    },
+    //update user email
+    async upadateUserEmail(userID,userEmail){
+        const existedUser = await this.getUserDataByID(userID);
+        if(existedUser){
+            return 0;
+        }
+        if(userEmail){
+            const query = 'UPDATE user SET email=? WHERE id=?;';
+            const [result] = await dbCon.query(query,[userEmail,userID]);
+            return result.affectedRows;
+        }
+    },
     //Update user data
     async updateUser(fullName,email,hashPassword,userID){
         //check if user with this id exists and take the data
