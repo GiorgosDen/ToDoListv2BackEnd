@@ -29,6 +29,7 @@ const getUserData = async(req,res)=>{
 const updateFullName = async(req,res)=>{
     try {
         const userId = req.userID;
+        console.log("updateFullName Controller receives userID=",userId);
         const newFullName= req.body.fullName;
         const result = await userModel.updateUserFullName(newFullName,userId);
         if(result>0){

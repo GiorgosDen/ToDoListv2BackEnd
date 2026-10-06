@@ -73,7 +73,7 @@ const userModel = {
         if(existedUser){
             return 0;
         }
-        if(password){
+        if(password && password!=''){
             const query = 'UPDATE user SET password=? WHERE id=?;';
             const [result] = await dbCon.query(query,[fullName,userID]);
             return result.affectedRows;
