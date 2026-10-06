@@ -31,6 +31,7 @@ const updateFullName = async(req,res)=>{
         const userId = req.userID;
         console.log("updateFullName Controller receives userID=",userId);
         const newFullName= req.body.fullName;
+        console.log("updateFullName Controller receives new Name=",newFullName);
         const result = await userModel.updateUserFullName(newFullName,userId);
         if(result>0){
             return res.status(200).json({message:"Update full name"});
@@ -47,7 +48,9 @@ const updateFullName = async(req,res)=>{
 const updatePassword = async(req,res)=>{
     try {
         const userId = req.userID;
+        console.log("updatePassword Controller receives userID=",userId);
         const newPassword= req.body.password;
+        console.log("updatePassword Controller receives new Password=",newPassword);
         const result = await userModel.updateUserFullName(newPassword,userId);
         if(result>0){
             return res.status(200).json({message:"Update password"});
