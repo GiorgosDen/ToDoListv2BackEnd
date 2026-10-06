@@ -30,8 +30,12 @@ const updateFullName = async(req,res)=>{
     try {
         const userId = req.userID;
         const newFullName= req.body.fullName;
-        await userModel.updateUserFullName(newFullName,userId);
-        return res.status(200).json({message:"Update full name"});
+        const result = await userModel.updateUserFullName(newFullName,userId);
+        if(result>0){
+            return res.status(200).json({message:"Update full name"});
+        }else{
+            return res.status(404).json({message:"User not found"});
+        }
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"Server error during updateUserData"});
@@ -43,8 +47,12 @@ const updatePassword = async(req,res)=>{
     try {
         const userId = req.userID;
         const newPassword= req.body.password;
-        await userModel.updateUserFullName(newPassword,userId);
-        return res.status(200).json({message:"Update password"});
+        const result = await userModel.updateUserFullName(newPassword,userId);
+        if(result>0){
+            return res.status(200).json({message:"Update password"});
+        }else{
+            return res.status(404).json({message:"User not found"});
+        }
     } catch (error) {
         console.log(error);
         return res.status(500).json({message:"Server error during updateUserData"});
