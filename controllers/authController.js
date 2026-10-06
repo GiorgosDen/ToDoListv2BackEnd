@@ -41,7 +41,7 @@ const authController = async (req,res)=>{
             });
 
         }else{
-            return res.status(401).json({message:"Invalid email or password"});
+            return res.status(403).json({message:"Invalid email or password"});
         }
     } catch (error) {
         console.log(error);

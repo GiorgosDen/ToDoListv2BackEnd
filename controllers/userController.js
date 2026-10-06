@@ -78,7 +78,7 @@ const deregisteredUser = async (req,res)=>{
         //Delete user 
         const affectedRows = await userModel.deleteUser(userId);
         if(affectedRows===1){
-            return res.status(201).json({message:`Success deregitered user with id:${userId}`});
+            return res.status(201).json({message:`Success deregistered user with id:${userId}`});
         }else{
             //Not found 
             return res.status(404).json({message:`User with id:${userId} not found`});
