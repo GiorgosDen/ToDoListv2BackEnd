@@ -1,4 +1,5 @@
 const securityModel = require('../models/securityModel');
+const jwt = require('jsonwebtoken');
 
 const addNewRecord = async(req,res)=>{
     try {
