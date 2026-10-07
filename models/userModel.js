@@ -1,4 +1,5 @@
 const dbCon =  require('../config/db');
+const bcrypt = require('bcrypt');
 
 const userModel = {
     async findEmailAvailiability(userEmail){
@@ -68,15 +69,23 @@ const userModel = {
         }
     },
     //Updates Password
-    async updateUserPassword(password, userID){
+    //password:new Imported password, curPassword: old password user import
+    async updateUserPassword(password,curPassword, userID){
         const existedUser = await this.getUserDataByID(userID);
+        //User not found
         if(!existedUser){
             return 0;
         }
-        if(password && password!=''){
+        const dbPassword = existedUser.password;// password that is stored in DB at this moment
+        const isMatches = await bcrypt.compare(curPassword,dbPassword);
+        //The imported current password is correct
+        if(isMatches){
+            const hashedNewPassword = await bcrypt.hash(password,10);
             const query = 'UPDATE user SET password=? WHERE id=?;';
-            const [result] = await dbCon.query(query,[fullName,userID]);
+            const [result] = await dbCon.query(query,[hashedNewPassword,userID]);
             return result.affectedRows;
+        }else{
+            return -1;//User imports the wrong password
         }
     },
     //update user email

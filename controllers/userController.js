@@ -47,15 +47,16 @@ const updateFullName = async(req,res)=>{
 
 const updatePassword = async(req,res)=>{
     try {
-        const userId = req.userID;
-        console.log("updatePassword Controller receives userID=",userId);
-        const newPassword= req.body.password;
-        console.log("updatePassword Controller receives new Password=",newPassword);
-        const result = await userModel.updateUserFullName(newPassword,userId);
+        const userId = req.userID;//From JWTs decode
+        const newPassword= req.body.password;//User's new password
+        const currentPassword = req.body.curPassword;//User's old/current password
+        const result = await userModel.updateUserPassword(newPassword,currentPassword,userId);
         if(result>0){
             return res.status(200).json({message:"Update password"});
-        }else{
+        }else if(result===0){
             return res.status(404).json({message:"User not found"});
+        }else{
+            return res.status(400).json({message:"Wrong Current Password"});
         }
     } catch (error) {
         console.log(error);
