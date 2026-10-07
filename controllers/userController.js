@@ -83,7 +83,7 @@ const sendVerficationEmails =async (req,res)=>{
             const dailyAttempts = await securityModel.getDailyAccountUpdateEmailAttemps(userId,newEmail);
             console.log("Attemps: ",dailyAttempts);
             if(dailyAttempts>=1){
-                return res.status(429).json({message:"You can only try to update your email with a specific email once per day"})
+                return res.status(429).json({message:"You can only try to update your email with a specific email once per day"});
             }
             //Sends verification emails by emailService.js
             const updateVerifyToken = jwt.sign(
