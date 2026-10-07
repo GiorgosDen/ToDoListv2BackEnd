@@ -31,7 +31,37 @@ const addNewBlackListEmail = async(req,res)=>{
     }
 }
 
+//Cancel update email verificaation
+const cancelUpdateEmailVerification = async(req,res)=>{
+    try {
+        //Extract token's data
+        const {token} = req.params;
+        if(!token){
+            return res.status(403).json({ message: "Token not found" });
+        }
+        //Extract updatedToken's data
+        const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const updateToken = decodes.updateToken;
+        if(!updateToken){
+            return res.status(403).json({ message: "Token not found" });
+        }
+        const decodesUpdateToken = jwt.verify(updateToken,process.env.ACCESS_TOKEN_SECRET);
+        const updatedUserID =  decodesUpdateToken.userID;
+        const newEmail = decodesUpdateToken.userEmail;
+        //Add new record 
+        //Check for blacklist
+
+    } catch (error) {
+        console.log(error);
+        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+            return res.status(403).json({ message: "Verification link is invalid or has expired." });
+        }
+        return res.status(500).json({message:"server error"});
+    }
+}
+
 module.exports={
     addNewRecord,
-    addNewBlackListEmail
+    addNewBlackListEmail,
+    cancelUpdateEmailVerification
 }

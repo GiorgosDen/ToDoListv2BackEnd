@@ -118,7 +118,10 @@ const sendVerficationEmails =async (req,res)=>{
 
 const updateEmailAfterVerification= async(req,res)=>{
     try {
-        const token = req.params.token;
+        const {token} = req.params;
+        if(!token){
+            return res.status(403).json({ message: "Token not found" });
+        }
         const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userID = decodes.userID;
         const userEmail = decodes.userEmail;
@@ -128,23 +131,6 @@ const updateEmailAfterVerification= async(req,res)=>{
         }else {
             return res.status(404).json({ message: `User [${userID} | ${affectedRows}] not found or already verified.` });
         }
-    } catch (error) {
-        console.log(error);
-        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-            return res.status(403).json({ message: "Verification link is invalid or has expired." });
-        }
-        return res.status(500).json({message:"server error"});
-    }
-}
-
-//Cancel update email verificaation
-const cancelUpdateEmailVerification = async(req,res)=>{
-    try {
-        const token = req.params.token;
-        const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        const updateToken = decodes.updateToken;
-        ///
-        
     } catch (error) {
         console.log(error);
         if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {

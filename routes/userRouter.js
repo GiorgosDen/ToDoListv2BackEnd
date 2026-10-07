@@ -10,8 +10,6 @@ router.get('/',userContoller.getUserData);
 router.post('/',verifyAccessToken,userContoller.sendVerficationEmails);
 //verify the new email  
 router.get('/email/:token',verifyAccessToken,userContoller.updateEmailAfterVerification);
-//cancel new email verification 
-router.get('/cancel-email/:token',verifyAccessToken,userContoller.cancelUpdateEmailVerification);
 //Update user data
 router.patch('/fullname',verifyAccessToken,userContoller.updateFullName);
 router.patch('/password',verifyAccessToken,userContoller.updatePassword);
