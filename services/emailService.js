@@ -58,7 +58,7 @@ const sendVerificationEmailtoUpdate = async(fullName,newEmail,verifyToken)=>{
             subject: 'Email Update Verification (ToDoListApp v2)',
             html: `Hi ${fullName}! <br><br>
                Thanks for using ToDoListApp v2! Please click the link below to verify your new email address: <br>
-                <a href="${process.env.BACK_URL}/user/email/${verifyToken}">Verify My New Email</a><br><br>
+                <a href="${process.env.BACK_URL}/auth/email/${verifyToken}">Verify My New Email</a><br><br>
                 This link will expire in 15 minutes. If you don't want to update your account email, you can safely ignore this email.<br><br>
                 Best regards, <br> 
                 The ToDoListApp Team`
