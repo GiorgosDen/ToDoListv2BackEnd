@@ -42,6 +42,14 @@ const securityModel ={
         }else{
             return 0;
         }
+    },
+    async getDailyAccountUpdateEmailAttemps(userID,email){
+        //Returns daily SuspiciousLogs that connect user Account with an Email
+        //Usage: Block 2 attemps for updating account from another mail
+        const query = "SELECT COUNT(*) AS attempts FROM suspiciouslog WHERE DateTime >= UNIX_TIMESTAMP(CURDATE()) AND DateTime < UNIX_TIMESTAMP(CURDATE() + INTERVAL 1 DAY) AND AssociateUser=? AND SuspiciousEmail=?;";
+        const [result] = await dbCon.query(query,[userID,email]);
+        const count = result[0].attempts;
+        return count;
     }
 }
 

@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
 //email service
 const emailService = require('../services/emailService');
-
+//security model
+const securityModel = require('../models/securityModel');
 
 //Get user's email and fullname
 const getUserData = async(req,res)=>{
@@ -73,15 +74,17 @@ const sendVerficationEmails =async (req,res)=>{
         const oldEmail = req.body.oldEmail
         const newEmail = req.body.newEmail;
         const fullName = req.body.fullName;
-        //console.log("SenEmails recieved Data:");
-        //console.log("fullName:", fullName); // Should be a string (e.g., "John Doe")
-//console.log("oldEmail:", oldEmail); // Should be a string (e.g., "old@gmail.com")
-//console.log("newEmail:", newEmail); // Should be a string (e.g., "new@gmail.com")
         //Check if email already used
         const emailAvailiable = await userModel.findEmailAvailiability(newEmail);
         if(!emailAvailiable){
             return res.status(409).json({message:"The email already used"});
         }else{
+            //Check If a user tries already to update with this email today
+            const dailyAttempts = await securityModel.getDailyAccountUpdateEmailAttemps(userId,newEmail);
+            console.log("Attemps: ",dailyAttempts);
+            if(dailyAttempts>=1){
+                return res.status(429).json({message:"You can only try to update your email with a specific email once per day"})
+            }
             //Sends verification emails by emailService.js
             const updateVerifyToken = jwt.sign(
                 {
@@ -125,6 +128,7 @@ const updateEmailAfterVerification= async(req,res)=>{
         const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userID = decodes.userID;
         const userEmail = decodes.userEmail;
+        
         const affectedRows = await userModel.upadateUserEmail(userID,userEmail);
         if(affectedRows>0){
             return res.status(200).json({message:"Update email"});
