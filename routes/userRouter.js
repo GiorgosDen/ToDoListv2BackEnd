@@ -9,7 +9,7 @@ router.get('/',userContoller.getUserData);
 //Send verification mail
 router.post('/',verifyAccessToken,userContoller.sendVerficationEmails);
 //verify the new email  
-router.get('/email/:token',verifyAccessToken,userContoller.updateEmailAfterVerification);
+router.get('/email/:token',userContoller.updateEmailAfterVerification);
 //Update user data
 router.patch('/fullname',verifyAccessToken,userContoller.updateFullName);
 router.patch('/password',verifyAccessToken,userContoller.updatePassword);
