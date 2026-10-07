@@ -31,7 +31,7 @@ const securityModel ={
         //1: Success
         //0: Email is not for blacklist
         const isForBlackList = await this.isForBlackListEmail(email);
-        if(isForBlackList && !isForBlackList){
+        if(isForBlackList){
             const query = "INSERT INTO blacklist (`Email`) VALUES (?);";
             const [result] = await dbCon.query(query,[email]);
             if(result.affectedRows>0){

@@ -197,7 +197,6 @@ module.exports ={
     updatePassword,
     sendVerficationEmails,
     updateEmailAfterVerification,
-    cancelUpdateEmailVerification,
     updateUserData,
     deregisteredUser,
     getUserData
