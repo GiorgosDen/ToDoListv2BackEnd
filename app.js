@@ -24,8 +24,8 @@ app.get('/favicon.ico', (req, res) => res.status(204).end());
 app.use('/public',publicRouter);
 app.use('/auth',authRouter);
 //Middleware
-app.use(verifyAccessToken);
 app.use('/user',userRouter);
+app.use(verifyAccessToken);
 app.use('/tasks',taskRouter);
 app.use('/taskCategories',taskCategoryRouter);
 app.use('/priority',taskPriorityRouter);
