@@ -86,7 +86,7 @@ const sendVerificationEmailtoInform = async(fullName,oldEmail,newEmail, verifyTo
             to: oldEmail,
             subject: 'Email Update Information (ToDoListApp v2)',
             html: `Hi ${fullName}! <br><br>
-               Thanks for using ToDoListApp v2! You received an email to verify your account email update to <${newEmail}>. If you don't wish to update your email, please click the link below to cancel. < br>
+               Thanks for using ToDoListApp v2! You received an email to verify your account email update to &lt;${newEmail}&gt;. If you don't wish to update your email, please click the link below to cancel. < br>
                 <a href="${process.env.BACK_URL}/user/cancel-email/${verifyToken}">Cancel New Email Verification</a><br><br>
                 This link will expire in 15 minutes. If you want to update your account email, you can safely ignore this email.<br><br>
                 Best regards, <br> 
