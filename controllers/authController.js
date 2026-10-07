@@ -86,16 +86,16 @@ const completedSignUp = async(req,res)=>{
         const userID = decodes.userID;
         const affectedRows = await userModel.verifyUserByID(Number(userID));
         if(affectedRows>0){
-            return res.redirect(process.env.FRONT_URL);
+            return res.redirect(`${process.env.FRONT_URL}?status=200`);
         }else {
-            return res.status(404).json({ message: `User [${userID} | ${affectedRows}] not found or already verified.` });
+            return res.redirect(`${process.env.FRONT_URL}?status=404`);
         }
     } catch (error) {
         console.log(error);
         if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-            return res.status(403).json({ message: "Verification link is invalid or has expired." });
+            return res.redirect(`${process.env.FRONT_URL}?status=403`);
         }
-        return res.status(500).json({message:"server error"})
+        return res.redirect(`${process.env.FRONT_URL}?status=500`);
     }
 }
 //Log Out (cleare cookie)
@@ -111,7 +111,7 @@ const updateEmailAfterVerification= async(req,res)=>{
     try {
         const {token} = req.params;
         if(!token){
-            return res.status(403).json({ message: "Token not found" });
+            return res.redirect(`${process.env.FRONT_URL}?status=403`);
         }
         const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const userID = decodes.userID;
@@ -119,16 +119,16 @@ const updateEmailAfterVerification= async(req,res)=>{
         
         const affectedRows = await userModel.upadateUserEmail(userID,userEmail);
         if(affectedRows>0){
-            return res.status(200).json({message:"Update email"});
+            return res.redirect(`${process.env.FRONT_URL}?status=200`);
         }else {
-            return res.status(404).json({ message: `User [${userID} | ${affectedRows}] not found or already verified.` });
+            return res.redirect(`${process.env.FRONT_URL}?status=404`);
         }
     } catch (error) {
         console.log(error);
         if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-            return res.status(403).json({ message: "Verification link is invalid or has expired." });
+            return res.redirect(`${process.env.FRONT_URL}?status=403`);
         }
-        return res.status(500).json({message:"server error"});
+        return res.redirect(`${process.env.FRONT_URL}?status=500`);
     }
 }
 
