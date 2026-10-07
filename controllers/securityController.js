@@ -49,8 +49,14 @@ const cancelUpdateEmailVerification = async(req,res)=>{
         const updatedUserID =  decodesUpdateToken.userID;
         const newEmail = decodesUpdateToken.userEmail;
         //Add new record 
+        const addNewSuspRec  = await securityModel.addNewSuspiciousRecord(updatedUserID,newEmail,'unathorized-email-updated');
         //Check for blacklist
-
+        const addNewBlackListRecord = await securityModel.addNewEmailInBlackList(newEmail);
+        
+        if(!addNewSuspRec) return res.status(500).json({message:"Error during add new log record"});
+        if(addNewBlackListRecord===-1) return res.status(500).json({message:"Error during add new Black List email"});
+        //If everything is fine
+        return res.status(200).json({message:"Secure account succesfully"});
     } catch (error) {
         console.log(error);
         if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {

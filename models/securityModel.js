@@ -18,7 +18,7 @@ const securityModel ={
         if(count>=3)return true;
         return false;
     },
-    async isInBlackList(email){
+    async isInBlackListEmails(email){
         //Returns true if found the email into blacklist table
         const query = "SELECT COUNT(*) AS records FROM balcklist WHERE Email=?;";
         const [result] = await dbCon.query(query,[email]);
@@ -31,7 +31,8 @@ const securityModel ={
         //1: Success
         //0: Email is not for blacklist
         const isForBlackList = await this.isForBlackListEmail(email);
-        if(isForBlackList){
+        const isInBlackList = await this.isInBlackListEmails(email);
+        if(isForBlackList && !isInBlackList){
             const query = "INSERT INTO blacklist (`Email`) VALUES (?);";
             const [result] = await dbCon.query(query,[email]);
             if(result.affectedRows>0){
