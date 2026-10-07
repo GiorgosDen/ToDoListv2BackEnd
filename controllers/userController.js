@@ -73,6 +73,7 @@ const sendVerficationEmails =async (req,res)=>{
         const oldEmail = req.body.oldEmail
         const newEmail = req.body.newEmail;
         const fullName = req.body.fullName;
+        console.log("SenEmails recieved Data:",oldEmail,newEmail,fullName);
         //Check if email already used
         const emailAvailiable = await userModel.findEmailAvailiability(newEmail);
         if(!emailAvailiable){
