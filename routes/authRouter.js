@@ -10,5 +10,7 @@ router.post('/signUp',auth.sendVerficationEmail);
 router.post('/logout',auth.logOutUser);
 //verify the new email  
 router.get('/email/:token',auth.updateEmailAfterVerification);
+//cancel new email verification 
+router.get('/cancel-email/:token',auth.cancelUpdateEmailVerification);
 
 module.exports = router;

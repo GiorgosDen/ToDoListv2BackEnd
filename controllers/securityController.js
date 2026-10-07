@@ -32,43 +32,7 @@ const addNewBlackListEmail = async(req,res)=>{
     }
 }
 
-//Cancel update email verificaation
-const cancelUpdateEmailVerification = async(req,res)=>{
-    try {
-        //Extract token's data
-        const {token} = req.params;
-        if(!token){
-            return res.redirect(`${process.env.FRONT_URL}?status=403`);
-        }
-        //Extract updatedToken's data
-        const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        const updateToken = decodes.updateToken;
-        if(!updateToken){
-            return res.redirect(`${process.env.FRONT_URL}?status=403`);
-        }
-        const decodesUpdateToken = jwt.verify(updateToken,process.env.ACCESS_TOKEN_SECRET);
-        const updatedUserID =  decodesUpdateToken.userID;
-        const newEmail = decodesUpdateToken.userEmail;
-        //Add new record 
-        const addNewSuspRec  = await securityModel.addNewSuspiciousRecord(updatedUserID,newEmail,'unathorized-email-updated');
-        //Check for blacklist
-        const addNewBlackListRecord = await securityModel.addNewEmailInBlackList(newEmail);
-        
-        if(!addNewSuspRec) return res.redirect(`${process.env.FRONT_URL}?status=500`);
-        if(addNewBlackListRecord===-1) return res.redirect(`${process.env.FRONT_URL}?status=500`);
-        //If everything is fine
-        return res.redirect(`${process.env.FRONT_URL}?status=200`);
-    } catch (error) {
-        console.log(error);
-        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
-            return res.redirect(`${process.env.FRONT_URL}?status=403`);
-        }
-        return res.redirect(`${process.env.FRONT_URL}?status=500`);
-    }
-}
-
 module.exports={
     addNewRecord,
     addNewBlackListEmail,
-    cancelUpdateEmailVerification
 }
