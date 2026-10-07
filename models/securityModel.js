@@ -20,7 +20,7 @@ const securityModel ={
     },
     async isInBlackListEmails(email){
         //Returns true if found the email into blacklist table
-        const query = "SELECT COUNT(*) AS records FROM balcklist WHERE Email=?;";
+        const query = "SELECT COUNT(*) AS records FROM blacklist WHERE Email=?;";
         const [result] = await dbCon.query(query,[email]);
         const count = result[0].records;
         if(count>=1)return true;
