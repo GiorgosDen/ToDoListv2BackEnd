@@ -111,7 +111,7 @@ const sendEmailAboutUserAccountDeactivate = async(fullName, email, verifyToken)=
         const mailConfig = {
             from: process.env.SMTP_PERSONAL_NAME,
             to: email,
-            subject: 'Email Update Information (ToDoListApp v2)',
+            subject: 'Deactivate Your Account (ToDoListApp v2)',
             html: `Hi ${fullName}! <br><br>
                Thanks for using ToDoListApp v2! Your account has been deactivated after your request to deregister. If you don't wish to delete your account, please click the link below to reactivate it. <br>
                 <a href="${process.env.BACK_URL}/auth/reactive/${verifyToken}">Activate my Account</a><br><br>
