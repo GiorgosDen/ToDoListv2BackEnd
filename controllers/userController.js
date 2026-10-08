@@ -77,7 +77,7 @@ const sendVerficationEmailsToUpdateEmail =async (req,res)=>{
         
         const isInBlackList = await securityModel.isInBlackListEmails(newEmail);//If user's email is blacklist
         if(isInBlackList){
-            return res.status(424).json({message:"Black List email"});
+            return res.status(422).json({message:"Black List email"});
         }
         //Check if email already used
         const emailAvailiable = await userModel.findEmailAvailiability(newEmail);
