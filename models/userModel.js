@@ -33,9 +33,10 @@ const userModel = {
         const existedUser = await this.findByEmail(email);
         //console.log(!existedUser);
         if(!existedUser){
-            //If doesn't exists
-            const query = "INSERT INTO user (fullName,email,password) VALUES (?,?,?)";
-            const [result] = await dbCon.query(query,[fullName,email,hashPassword]);
+            //If does exists
+            const timestamp = Math.floor(Date.now() / 1000);
+            const query = "INSERT INTO user (fullName,email,password,verified,deactivationDateTime) VALUES (?,?,?,0,?)";
+            const [result] = await dbCon.query(query,[fullName,email,hashPassword,timestamp]);
             return result.insertId;//Get new user id
         }
         return 0;//If the email is not availiable
@@ -44,7 +45,7 @@ const userModel = {
     async verifyUserByID(userID){
         const existedUser =  await this.findUnverifiedByID(userID);
         if(existedUser){
-            const query = "UPDATE user SET verified=1 WHERE id=?;";
+            const query = "UPDATE user SET verified=1 AND deactivationDateTime=NULL WHERE id=?;";
             const [result] = await dbCon.query(query,[userID]);
             return result.affectedRows;
         }   
