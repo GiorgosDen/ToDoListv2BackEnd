@@ -2,7 +2,15 @@ const dbCon =  require('../config/db');
 const bcrypt = require('bcrypt');
 
 const userModel = {
+    async isEmailInUnverifiedAccount(userEmail){
+        //For unverified accounts  
+        const query = "SELECT * FROM user WHERE email=? AND verified=0;";
+        const [users] = await dbCon.query(query,[userEmail]);
+        if(users[0])return true;
+        return false;
+    },
     async findEmailAvailiability(userEmail){
+        //In general
         const query = "SELECT * FROM user WHERE email=?;";
         const [users] = await dbCon.query(query,[userEmail]);
         if(users[0])return false;

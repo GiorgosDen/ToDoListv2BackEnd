@@ -58,7 +58,14 @@ const authController = async (req,res)=>{
 const sendVerficationEmail =async (req,res)=>{
     try {
         const {fullName,email, password} = req.body;
-        //Check if email already used
+        //Check if email already is in unverified account
+        const isInUnverifiedAccount = await userModel.isEmailInUnverifiedAccount(email);
+        if(isInUnverifiedAccount){
+            //Means that the user already tries to signup, but doesn't verify the account in 15 minutes
+            //Tommorow the account will be deleted, so will can try again
+            return res.status(429).json({message:"You have already try to signUp with this email today. Try again tomorow"});
+        }
+        //Check if email already used in general 
         const emailAvailiable = await userModel.findEmailAvailiability(email);
         if(!emailAvailiable){
             return res.status(409).json({message:"The email already used"});
