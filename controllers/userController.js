@@ -182,31 +182,11 @@ const deactivateAndSendCancelationEmail = async (req,res)=>{
     }
 }
 
-//Remove user from the system
-//MySQL removes automatically the associate tasks/categories (DELETE CASCADE)
-const deregisteredUser = async (req,res)=>{
-    try {
-        const userId = req.userID;
-        //Delete user 
-        const affectedRows = await userModel.deleteUser(userId);
-        if(affectedRows===1){
-            return res.status(201).json({message:`Success deregistered user with id:${userId}`});
-        }else{
-            //Not found 
-            return res.status(404).json({message:`User with id:${userId} not found`});
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:"Server error"});
-    }
-}
-
 module.exports ={
     updateFullName,
     updatePassword,
     sendVerficationEmailsToUpdateEmail,
     updateUserData,
     deactivateAndSendCancelationEmail,
-    deregisteredUser,
     getUserData
 }
