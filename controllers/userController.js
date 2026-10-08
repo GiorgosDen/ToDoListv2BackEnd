@@ -157,6 +157,7 @@ const deactivateAndSendCancelationEmail = async (req,res)=>{
         const userId = req.userID;
         const userFullName = req.body.userFullName;
         const userEmail = req.body.userEmail;
+        console.log("Deactivate account with ID",userId);
         const deactivateAccount = await userModel.deactivateUserAccount(userId);
         //return the affected rows-> 1 in case that deactivates the user account 
         if(deactivateAccount>0){
