@@ -13,7 +13,5 @@ router.post('/deactivate-email',verifyAccessToken,userContoller.deactivateAndSen
 router.patch('/fullname',verifyAccessToken,userContoller.updateFullName);
 router.patch('/password',verifyAccessToken,userContoller.updatePassword);
 router.put('/',verifyAccessToken,userContoller.updateUserData);
-//Deregistered user
-router.delete('/',verifyAccessToken,userContoller.deregisteredUser);
 
 module.exports = router;
