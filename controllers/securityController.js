@@ -32,6 +32,7 @@ const addNewBlackListEmail = async(req,res)=>{
     }
 }
 
+
 module.exports={
     addNewRecord,
     addNewBlackListEmail,

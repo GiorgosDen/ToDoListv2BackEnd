@@ -5,6 +5,8 @@ require('dotenv').config();
 
 //userModel
 const userModel =  require('../models/userModel');
+//security model
+const securityModel = require('../models/securityModel');
 //service
 const emailService = require('../services/emailService');
 
@@ -17,6 +19,10 @@ const authController = async (req,res)=>{
         const logedUser = await userModel.findByEmail(importedEmail); //JSON with user Data or undefined
         if(!logedUser){
             return res.status(404).json({message:"User with this email doesn't found"});
+        }
+        const isInBlackList = await securityModel.isInBlackListEmails(importedEmail);//If user's email is blacklist
+        if(isInBlackList){
+            return res.status(424).json({message:"Black List email"});
         }
         //console.log("Found this user");
         //console.log(logedUser);
@@ -56,6 +62,10 @@ const sendVerficationEmail =async (req,res)=>{
         const emailAvailiable = await userModel.findEmailAvailiability(email);
         if(!emailAvailiable){
             return res.status(409).json({message:"The email already used"});
+        }
+        const isInBlackList = await securityModel.isInBlackListEmails(importedEmail);//If user's email is blacklist
+        if(isInBlackList){
+            return res.status(424).json({message:"Black List email"});
         }
         //Hash the password 
         const salt = 10;
