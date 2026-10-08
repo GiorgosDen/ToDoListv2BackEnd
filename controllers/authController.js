@@ -70,7 +70,7 @@ const sendVerficationEmail =async (req,res)=>{
         if(!emailAvailiable){
             return res.status(409).json({message:"The email already used"});
         }
-        const isInBlackList = await securityModel.isInBlackListEmails(importedEmail);//If user's email is blacklist
+        const isInBlackList = await securityModel.isInBlackListEmails(email);//If user's email is blacklist
         if(isInBlackList){
             return res.status(422).json({message:"Black List email"});
         }
