@@ -135,6 +135,7 @@ const userModel = {
     //Deactivate a user account (set deactivationDateTime & set verified=0)
     async deactivateUserAccount(userID){
         const existedUser = await this.getUserDataByID(userID);
+        console.log(existedUser,userID);
         if(!existedUser){
             return 0;
         }
