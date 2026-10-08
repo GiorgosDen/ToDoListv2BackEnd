@@ -132,18 +132,31 @@ const userModel = {
         return rows.affectedRows;
             
     },
-    async deleteUser(userID){
-        //Check if user exists
-        let query = "SELECT * FROM user WHERE id=?;";
-        const [user] = await dbCon.query(query,[userID]);
-        if(user){
-            //delete user
-            query = "DELETE FROM user WHERE id=?;";
-            const [rows] = await dbCon.query(query,[userID]);
-            return rows.affectedRows;
+    //Deactivate a user account (set deactivationDateTime & set verified=0)
+    async deactivateUserAccount(userID){
+        const existedUser = await this.getUserDataByID(userID);
+        if(!existedUser){
+            return 0;
         }
-        //User not found
-        return 0; 
+        const timestamp = Math.floor(Date.now() / 1000);
+        const query = "UPDATE user SET verified=0, deactivationDateTime=? WHERE id=?;";
+        const [rows] = await dbCon.query(query,[timestamp,userID]);
+        return rows.affectedRows;
+    },
+    async activateUserAccount(userID){
+        const existedUser = await this.getUserDataByID(userID);
+        if(!existedUser){
+            return 0;
+        }
+        const query = "UPDATE user SET verified=1, deactivationDateTime=NULL WHERE id=?;";
+        const [rows] = await dbCon.query(query,[userID]);
+        return rows.affectedRows;
+    },
+    async deleteInactiveAccounts(){
+        //Delete accounts these are deactivate the last 2 days
+        query = "DELETE FROM user WHERE verified=0 AND deactivationDateTime<UNIX_TIMESTAMP(CURDATE() - INTERVAL 2 DAY);";
+        const [rows] = await dbCon.query(query);
+        return rows.affectedRows; 
     }
 }
 

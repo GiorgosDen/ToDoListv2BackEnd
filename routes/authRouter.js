@@ -12,5 +12,7 @@ router.post('/logout',auth.logOutUser);
 router.get('/email/:token',auth.updateEmailAfterVerification);
 //cancel new email verification 
 router.get('/cancel-email/:token',auth.cancelUpdateEmailVerification);
+//reactivate user account
+router.get('/reactive/:token',auth.reactivateUserAccount);
 
 module.exports = router;

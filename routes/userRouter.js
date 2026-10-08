@@ -6,8 +6,9 @@ const userContoller =  require('../controllers/userController');
 const verifyAccessToken = require('../middleware/verifyAccessToken');
 //Get user data
 router.get('/',userContoller.getUserData);
-//Send verification mail
-router.post('/',verifyAccessToken,userContoller.sendVerficationEmails);
+//Send verification mails
+router.post('/update-email',verifyAccessToken,userContoller.sendVerficationEmailsToUpdateEmail);
+router.post('/deactivate-email',verifyAccessToken,userContoller.deactivateAndSendCancelationEmail);
 //Update user data
 router.patch('/fullname',verifyAccessToken,userContoller.updateFullName);
 router.patch('/password',verifyAccessToken,userContoller.updatePassword);

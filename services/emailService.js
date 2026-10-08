@@ -102,8 +102,36 @@ const sendVerificationEmailtoInform = async(fullName,oldEmail,newEmail, verifyTo
     }
 }
 
+//Return: True or False
+const sendEmailAboutUserAccountDeactivate = async(fullName, email, verifyToken)=>{
+    try {
+        if(!verifyToken){
+            return false;
+        }
+        const mailConfig = {
+            from: process.env.SMTP_PERSONAL_NAME,
+            to: email,
+            subject: 'Email Update Information (ToDoListApp v2)',
+            html: `Hi ${fullName}! <br><br>
+               Thanks for using ToDoListApp v2! Your account has been deactivated after your request to deregister. If you don't wish to delete your account, please click the link below to reactivate it. <br>
+                <a href="${process.env.BACK_URL}/auth/reactive/${verifyToken}">Activate my Account</a><br><br>
+                This link will expire in 24 hours. After that, your account, along with all associated data (email, password, full name, tasks, and custom task categories), will be deleted from our systems. <br><br>
+                Best regards, <br> 
+                The ToDoListApp Team`
+        };
+        const info = await transporter.sendMail(mailConfig); 
+        console.log(`Send information email. Details:${info.messageId}`);
+        return true; 
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 module.exports = {
     sendVerificationEmail,
     sendVerificationEmailtoUpdate,
-    sendVerificationEmailtoInform
+    sendVerificationEmailtoInform,
+    sendEmailAboutUserAccountDeactivate
 };

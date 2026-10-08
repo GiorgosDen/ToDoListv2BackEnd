@@ -66,9 +66,9 @@ const updatePassword = async(req,res)=>{
 
 }
 
-//Send verification emails to change the password
+//Send verification emails to change the email
 //Params: old & new email, full name 
-const sendVerficationEmails =async (req,res)=>{
+const sendVerficationEmailsToUpdateEmail =async (req,res)=>{
     try {
         const userId = req.userID;
         const oldEmail = req.body.oldEmail
@@ -152,6 +152,36 @@ const updateUserData = async(req,res)=>{
     }
 }
 
+const deactivateAndSendCancelationEmail = async (req,res)=>{
+    try {
+        const userId = req.userID;
+        const userFullName = req.body.userFullName;
+        const userEmail = req.body.email;
+        const deactivateAccount = await userModel.deactivateUserAccount(userId);
+        //return the affected rows-> 1 in case that deactivates the user account 
+        if(deactivateAccount>0){
+            const deactivateToken = jwt.sign(
+                {
+                    userID:userId,
+                },
+                process.env.ACCESS_TOKEN_SECRET,
+                {expiresIn:'1d'}
+                );
+            const sendInformEmail = await emailService.sendEmailAboutUserAccountDeactivate(userFullName,userEmail, deactivateToken);
+            if(sendInformEmail){
+                return res.status(201).json({message:"Send inform email"});
+            }else{
+                return res.status(500).json({message:"The email dosen't sended"});
+            }
+        }else{
+            return res.status(500).json({message:"Something goes wrong"});
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"Server error during updateUserData"});
+    }
+}
+
 //Remove user from the system
 //MySQL removes automatically the associate tasks/categories (DELETE CASCADE)
 const deregisteredUser = async (req,res)=>{
@@ -174,8 +204,9 @@ const deregisteredUser = async (req,res)=>{
 module.exports ={
     updateFullName,
     updatePassword,
-    sendVerficationEmails,
+    sendVerficationEmailsToUpdateEmail,
     updateUserData,
+    deactivateAndSendCancelationEmail,
     deregisteredUser,
     getUserData
 }

@@ -167,11 +167,36 @@ const cancelUpdateEmailVerification = async(req,res)=>{
     }
 }
 
+const reactivateUserAccount= async(req,res)=>{
+    try {
+        const {token} = req.params;
+        if(!token){
+            return res.redirect(`${process.env.FRONT_URL}?status=403`);
+        }
+        const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const userID = decodes.userID;
+        
+        const affectedRows = await userModel.activateUserAccount(userID);
+        if(affectedRows>0){
+            return res.redirect(`${process.env.FRONT_URL}?status=200`);
+        }else {
+            return res.redirect(`${process.env.FRONT_URL}?status=500`);
+        }
+    } catch (error) {
+        console.log(error);
+        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+            return res.redirect(`${process.env.FRONT_URL}?status=403`);
+        }
+        return res.redirect(`${process.env.FRONT_URL}?status=500`);
+    }
+}
+
 module.exports = {
     authController,
     sendVerficationEmail,
     completedSignUp,
     logOutUser,
     updateEmailAfterVerification,
-    cancelUpdateEmailVerification
+    cancelUpdateEmailVerification,
+    reactivateUserAccount
 };
