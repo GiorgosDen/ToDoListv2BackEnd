@@ -6,8 +6,8 @@ const {Server} = require('socket.io');
 const port = process.env.PORT || 3000;
 const corsOptions = require('./config/corsOptions');
 
-const taskSceduler = require('./services/taskScheduler');
-
+const taskScheduler = require('./services/taskScheduler');
+const userAccountScheduler = require('./services/taskScheduler');
 //Create HTTP1 server
 const serverHTTP1 = http.createServer(app);
 const io = new Server(serverHTTP1,{ 
@@ -18,7 +18,8 @@ const startServer = async ()=>{
     try {
         //Check if db connection works
         await dbConnection.query('SELECT 1');
-        taskSceduler.expiredTaskControllSceduler(io);
+        taskScheduler.expiredTaskControllSceduler(io);
+        userAccountScheduler.expiredTaskControllSceduler(io);
         serverHTTP1.listen(port, ()=>{
             console.log(`Server running in PORT: ${port}`);
         });
