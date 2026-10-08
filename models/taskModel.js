@@ -64,15 +64,17 @@ const taskModel = {
         const [result] = await dbCon.query(query,[userID]);
         return result.affectedRows;
     },
-    //Update task state as Completed
+    //Update task state as Completed or In Progress
     async updateTaskStateByID(taskID){
-        //Check if task exists and is not completed
-        let query = "SELECT * FROM task WHERE id=? AND state!=3";
-        const [task] = await dbCon.query(query,[taskID]);
-        if(task){
-            //State=3 means Completed
-            query = "UPDATE task SET State = 3 WHERE id=?;";
-            const [result] = await dbCon.query(query,[taskID]);
+        //Check if task exists and is not expired
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        let query = "SELECT * FROM task WHERE DateTime>? AND id=? AND State!=2;";
+        const [task] = await dbCon.query(query,[currentTimestamp,taskID]);
+        if(task && task.length>0){
+            //State=3 means Completed and State=1 means In progress
+            const taskState = task[0].State===3?1:3;
+            query = "UPDATE task SET State = ? WHERE id=?;";
+            const [result] = await dbCon.query(query,[taskState,taskID]);
             return result.affectedRows;
         }
         return 0;
