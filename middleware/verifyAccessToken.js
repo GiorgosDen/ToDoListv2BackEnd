@@ -10,7 +10,7 @@ const verifyAccessToken = async (req,res,next)=>{
         process.env.ACCESS_TOKEN_SECRET,
     (error,decodes)=>{
         console.log(error);
-        if(error) return res.status(403).json({ message:"Forbidden Token"});
+        if(error) return res.status(410).json({ message:"Forbidden Token"});
         req.userID = decodes.userID;
        // console.log(decodes);
         next();
