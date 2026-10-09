@@ -171,7 +171,7 @@ const userModel = {
     },
     async deleteInactiveAccounts(){
         //Delete accounts these are deactivate the last 2 days
-        const query = "DELETE FROM user WHERE verified=0 AND deactivationDateTime<UNIX_TIMESTAMP(CURDATE() - INTERVAL 2 DAY);";
+        const query = "DELETE FROM user WHERE verified=0 AND deactivationDateTime<UNIX_TIMESTAMP(CURDATE() - 172800);";
         const [rows] = await dbCon.query(query);
         return rows.affectedRows; 
     }
