@@ -271,7 +271,7 @@ const resetAccountPassword = async(req,res)=>{
              return res.redirect(`${process.env.FRONT_URL}?status=200`);
         }
     } catch (error) {
-        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError' || error.name === 'NotBeforeError') {
             return res.redirect(`${process.env.FRONT_URL}?status=403`);
         }
         return res.redirect(`${process.env.FRONT_URL}?status=500`);
