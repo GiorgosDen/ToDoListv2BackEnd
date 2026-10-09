@@ -60,7 +60,7 @@ const userModel = {
     async verifyUserByID(userID){
         const existedUser =  await this.findUnverifiedByID(userID);
         if(existedUser){
-            const query = "UPDATE user SET verified=1 AND deactivationDateTime=NULL WHERE id=?;";
+            const query = "UPDATE user SET verified=1, deactivationDateTime=NULL WHERE id=?;";
             const [result] = await dbCon.query(query,[userID]);
             return result.affectedRows;
         }   
