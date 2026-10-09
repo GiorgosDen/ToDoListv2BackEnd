@@ -246,7 +246,7 @@ const sendResetPasswordEmail = async(req,res)=>{
         }else{
             const accountID = emailAccount.id;
             const fullName = emailAccount.fullName;
-            const sendEmail = await emailService.sendResetPasswordEmail(accountID,fullName);
+            const sendEmail = await emailService.sendResetPasswordEmail(accountID,fullName,email);
             if(!sendEmail){
                 return res.status(500).json({message:"Send reset password email failed"});
             }
