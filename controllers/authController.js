@@ -237,6 +237,47 @@ const reactivateUserAccount= async(req,res)=>{
     }
 }
 
+const sendResetPasswordEmail = async(req,res)=>{
+    try {
+        const email = req.body.email;
+        const emailAccount = await userModel.findByEmail(email);
+        if(!emailAccount){
+            return res.status(500).json({message:"Some server error"});
+        }else{
+            const accountID = emailAccount.id;
+            const fullName = emailAccount.fullName;
+            const sendEmail = await emailService.sendResetPasswordEmail(accountID,fullName);
+            if(!sendEmail){
+                return res.status(500).json({message:"Send reset password email failed"});
+            }
+            return res.status(201).json({message:"Send reset password email"});
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"Error during sending reset password email"});
+    }
+}
+
+const resetAccountPassword = async(req,res)=>{
+    try {
+        const token = req.params.token;
+        const decodes = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const accountID = decodes.userID;
+        const newPassword = req.body.password;
+        const salt = 10;
+        const hashedPassword = await bcrypt.hash(newPassword,salt);
+        const affectedRows = await userModel.resetPassword(accountID,hashedPassword);
+        if(affectedRows>0){
+             return res.redirect(`${process.env.FRONT_URL}?status=200`);
+        }
+    } catch (error) {
+        if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
+            return res.redirect(`${process.env.FRONT_URL}?status=403`);
+        }
+        return res.redirect(`${process.env.FRONT_URL}?status=500`);
+    }
+}
+
 module.exports = {
     authController,
     sendVerficationEmail,
@@ -245,5 +286,7 @@ module.exports = {
     logOutUser,
     updateEmailAfterVerification,
     cancelUpdateEmailVerification,
-    reactivateUserAccount
+    reactivateUserAccount,
+    sendResetPasswordEmail,
+    resetAccountPassword
 };

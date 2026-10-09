@@ -161,10 +161,43 @@ const sendEmailAboutUserAccountDeactivate = async(fullName, email, verifyToken)=
     }
 }
 
+//Pass the userID into the token
+//And resends a email (in <email> address) with verification link [apiCallURL/{token}]
+//Usage: Resend verification email to sign up
+//Return: True or False
+const sendResetPasswordEmail = async(accountID,fullName,email)=>{
+    try {
+        const verifyToken = jwt.sign(
+            {userID:accountID},
+            process.env.ACCESS_TOKEN_SECRET,
+            {expiresIn:'15m'}
+        );
+        const mailConfig = {
+            from: process.env.SMTP_PERSONAL_NAME,
+            to: email,
+            subject: 'Reset Account Password (ToDoListApp v2)',
+            html: `Hi ${fullName}! <br><br>
+                It looks like you forgot the password for your ToDoListApp v2 account! Please click the link below to reset your account password and receive access again: <br>
+                <a href="${process.env.FRONT_URL}/reset/${verifyToken}">Reset My Password</a><br><br>
+                This link will expire in 15 minutes. If you remember and don't want to update the account password, you can safely ignore this email.<br><br>
+                Best regards, <br> 
+                The ToDoListApp Team`
+        };
+        const info = await transporter.sendMail(mailConfig); 
+        console.log(`Send verification email. Details:${info.messageId}`);
+        return true; 
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 module.exports = {
     sendVerificationEmail,
     reSendVerificationEmail,
     sendVerificationEmailtoUpdate,
     sendVerificationEmailtoInform,
-    sendEmailAboutUserAccountDeactivate
+    sendEmailAboutUserAccountDeactivate,
+    sendResetPasswordEmail
 };

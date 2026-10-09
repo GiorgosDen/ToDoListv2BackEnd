@@ -17,14 +17,14 @@ const userModel = {
         return true;
     },
     async findByEmail(userEmail){
-        const query = "SELECT * FROM user WHERE email=? AND verified=1;";
+        const query = "SELECT id,fullName,email FROM user WHERE email=? AND verified=1;";
         const [users] = await dbCon.query(query,[userEmail]);
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined
     },
     //Find the unverified user by id (for verified account)
     async findUnverifiedByID(userID){
-        const query = "SELECT * FROM user WHERE id=? AND verified=0;";
+        const query = "SELECT id,fullName FROM user WHERE id=? AND verified=0;";
         const [users] = await dbCon.query(query,[userID]);
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined
@@ -174,6 +174,11 @@ const userModel = {
         const query = "DELETE FROM user WHERE verified=0 AND deactivationDateTime<UNIX_TIMESTAMP(CURDATE() - 172800);";
         const [rows] = await dbCon.query(query);
         return rows.affectedRows; 
+    },
+    async resetPassword(userID,hashedPassword){
+        const query = "UPDATE user SET password=? WHERE id=?;";
+        const [rows] = await dbCon.query(query,[hashedPassword,userID]);
+        return rows.affectedRows;
     }
 }
 
