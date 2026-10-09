@@ -103,10 +103,15 @@ const sendVerficationEmail =async (req,res)=>{
 const resendVerificationEmail = async(req,res)=>{
     try {
         const unverifiedAccountEmail = req.body.email;
+        //If a record (verified or not) with this email exists: true
+        const emailAccount = await userModel.findEmailAvailiability(unverifiedAccountEmail);
+        if(!emailAccount){
+            return res.status(404).json({message:"Account with this email doesn't exist"});
+        }
+        //If an account with this email is unverified -> true
         const isInUnverifiedAccount = await userModel.isEmailInUnverifiedAccount(unverifiedAccountEmail);
-        const emailAccount = await userModel.findByEmail(unverifiedAccountEmail);
-        if(!isInUnverifiedAccount && !emailAccount){
-            return res.status(404).json({message:"Email Not Found"});
+        if(!isInUnverifiedAccount){
+            return res.status(404).json({message:"Account with this email is already verified"});
         }else{
             //If account with this email exists and is unverified
             const accountID  = emailAccount.id;
