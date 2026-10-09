@@ -9,7 +9,7 @@ router.post('/login',auth.authController);
 router.post('/signUp',auth.sendVerficationEmail);
 router.post('/reverify',auth.resendVerificationEmail);
 router.post('/reset-pass-mail',auth.sendResetPasswordEmail);
-router.post('reset-password/:token',auth.resetAccountPassword);
+router.post('/reset-password/:token',auth.resetAccountPassword);
 router.post('/logout',auth.logOutUser);
 //verify the new email  
 router.get('/email/:token',auth.updateEmailAfterVerification);
