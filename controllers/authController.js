@@ -100,6 +100,30 @@ const sendVerficationEmail =async (req,res)=>{
 
 }
 
+const resendVerificationEmail = async(req,res)=>{
+    try {
+        const unverifiedAccountEmail = req.body.email;
+        const isInUnverifiedAccount = await userModel.isEmailInUnverifiedAccount(unverifiedAccountEmail);
+        const emailAccount = await userModel.findByEmail(unverifiedAccountEmail);
+        if(!isInUnverifiedAccount && !emailAccount){
+            return res.status(404).json({message:"Email Not Found"});
+        }else{
+            //If account with this email exists and is unverified
+            const accountID  = emailAccount.id;
+            const fullName = emailAccount.fullName;
+            //Call Email service
+            const sendEmail = await emailService.reSendVerificationEmail(accountID,fullName,unverifiedAccountEmail);
+            if(!sendEmail){
+                return res.status(500).json({message:"Resend verification email failed"});
+            }
+            return res.status(201).json({message:"Resend the verification email"});
+        } 
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({message:"Error during sending ver email"});
+    }
+}
+
 //Verify the new user (uses url token to gets the user ID)
 const completedSignUp = async(req,res)=>{
     try {

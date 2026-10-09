@@ -44,6 +44,38 @@ const sendVerificationEmail = async(newUserID,fullName,email)=>{
     }
 }
 
+//Pass the userID into the token
+//And resends a email (in <email> address) with verification link [apiCallURL/{token}]
+//Usage: Resend verification email to sign up
+//Return: True or False
+const reSendVerificationEmail = async(accountID,fullName,email)=>{
+    try {
+        const verifyToken = jwt.sign(
+            {userID:accountID},
+            process.env.ACCESS_TOKEN_SECRET,
+            {expiresIn:'15m'}
+        );
+        const mailConfig = {
+            from: process.env.SMTP_PERSONAL_NAME,
+            to: email,
+            subject: 'Email Verification (ToDoListApp v2)',
+            html: `Hi ${fullName}! <br><br>
+                You have an unverified account in ToDoListApp v2! Please click the link below to verify your email address and activate your account: <br>
+                <a href="${process.env.BACK_URL}/auth/verify/${verifyToken}">Verify My Email</a><br><br>
+                This link will expire in 15 minutes. If you didn't verify your account with us, you can safely ignore this email. Your account record will be removed 48 hours after your first signup attempt.<br><br>
+                Best regards, <br> 
+                The ToDoListApp Team`
+        };
+        const info = await transporter.sendMail(mailConfig); 
+        console.log(`Send verification email. Details:${info.messageId}`);
+        return true; 
+        
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 //Pass the userID & new email into the token
 //And sends a email (in <email> address) with verification link [apiCallURL/{token}]
 //Return: True or False
@@ -131,6 +163,7 @@ const sendEmailAboutUserAccountDeactivate = async(fullName, email, verifyToken)=
 
 module.exports = {
     sendVerificationEmail,
+    reSendVerificationEmail,
     sendVerificationEmailtoUpdate,
     sendVerificationEmailtoInform,
     sendEmailAboutUserAccountDeactivate
