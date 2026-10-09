@@ -120,6 +120,7 @@ const resendVerificationEmail = async(req,res)=>{
             //If account with this email exists and is unverified
             const accountID  = accountDetails.id;
             const fullName = accountDetails.fullName;
+            console.log("Unverified Account Resend Email: ",accountID,fullName,unverifiedAccountEmail);
             //Call Email service
             const sendEmail = await emailService.reSendVerificationEmail(accountID,fullName,unverifiedAccountEmail);
             if(!sendEmail){
