@@ -13,8 +13,13 @@ const emailService = require('../services/emailService');
 const authController = async (req,res)=>{
     try {
         const {importedEmail, importedPassword} = req.body;
-        //console.log("Login imported data: ");
-        //console.log(req.body);
+        //Check ofr an unverified account
+        const isInUnverifiedAccount = await userModel.isEmailInUnverifiedAccount(importedEmail);
+        if(isInUnverifiedAccount){
+            //Means that the user already tries to signup, but doesn't verify the account in 15 minutes
+            //It needs to resend a verification email (an unverified account deleted after 48 hours)
+            return res.status(423).json({message:"You already have an unverified account with this email"});
+        }
         //Get the user by email
         const logedUser = await userModel.findByEmail(importedEmail); //JSON with user Data or undefined
         if(!logedUser){
@@ -62,8 +67,8 @@ const sendVerficationEmail =async (req,res)=>{
         const isInUnverifiedAccount = await userModel.isEmailInUnverifiedAccount(email);
         if(isInUnverifiedAccount){
             //Means that the user already tries to signup, but doesn't verify the account in 15 minutes
-            //Tommorow the account will be deleted, so will can try again
-            return res.status(429).json({message:"You have already try to signUp with this email today. Try again tomorow"});
+            //It needs to resend a verification email (an unverified account deleted after 48 hours)
+            return res.status(423).json({message:"You already have an unverified account with this email"});
         }
         //Check if email already used in general 
         const emailAvailiable = await userModel.findEmailAvailiability(email);
