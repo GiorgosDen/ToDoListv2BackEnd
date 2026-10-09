@@ -268,14 +268,14 @@ const resetAccountPassword = async(req,res)=>{
         const hashedPassword = await bcrypt.hash(newPassword,salt);
         const affectedRows = await userModel.resetPassword(accountID,hashedPassword);
         if(affectedRows>0){
-             return res.redirect(`${process.env.FRONT_URL}?status=200`);
+            return res.status(200).json({message:"Reset the password"});
         }
     } catch (error) {
         console.log(error);
         if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError' || error.name === 'NotBeforeError') {
-            return res.redirect(`${process.env.FRONT_URL}?status=403`);
+            return res.status(403).json({message:"JTW is expired or unvalid"});
         }
-        return res.redirect(`${process.env.FRONT_URL}?status=500`);
+        return res.status(500).json({message:"Server error during reset the password"});
     }
 }
 
