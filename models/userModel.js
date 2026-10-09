@@ -17,7 +17,7 @@ const userModel = {
         return true;
     },
     async findByEmail(userEmail){
-        const query = "SELECT id,fullName,email FROM user WHERE email=? AND verified=1;";
+        const query = "SELECT * FROM user WHERE email=? AND verified=1;";
         const [users] = await dbCon.query(query,[userEmail]);
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined

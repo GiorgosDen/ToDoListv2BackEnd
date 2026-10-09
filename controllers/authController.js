@@ -59,6 +59,7 @@ const authController = async (req,res)=>{
         return res.status(500).json({message:"Server Error"});
     }
 };
+
 //Send verification email to sign up
 const sendVerficationEmail =async (req,res)=>{
     try {
