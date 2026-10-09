@@ -240,6 +240,7 @@ const reactivateUserAccount= async(req,res)=>{
 module.exports = {
     authController,
     sendVerficationEmail,
+    resendVerificationEmail,
     completedSignUp,
     logOutUser,
     updateEmailAfterVerification,
