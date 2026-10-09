@@ -29,6 +29,13 @@ const userModel = {
         //console.log(users[0]);
         return users[0];//A JSON with user's data or a undefined
     },
+     //Find the unverified user by email
+    async findUnverifiedByEmail(userEmail){
+        const query = "SELECT * FROM user WHERE email=? AND verified=0;";
+        const [users] = await dbCon.query(query,[userEmail]);
+        //console.log(users[0]);
+        return users[0];//A JSON with user's data or a undefined
+    },
     //Find the user by id (for updating data)
     async findByID(userID){
         const query = "SELECT * FROM user WHERE id=? AND verified=1;";

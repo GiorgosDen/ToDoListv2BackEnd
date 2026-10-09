@@ -113,9 +113,13 @@ const resendVerificationEmail = async(req,res)=>{
         if(!isInUnverifiedAccount){
             return res.status(404).json({message:"Account with this email is already verified"});
         }else{
+            const accountDetails = await userModel.findUnverifiedByEmail(unverifiedAccountEmail);
+            if(!accountDetails){
+                return res.status(500).json({message:"Error during sending ver email"});
+            }
             //If account with this email exists and is unverified
-            const accountID  = emailAccount.id;
-            const fullName = emailAccount.fullName;
+            const accountID  = accountDetails.id;
+            const fullName = accountDetails.fullName;
             //Call Email service
             const sendEmail = await emailService.reSendVerificationEmail(accountID,fullName,unverifiedAccountEmail);
             if(!sendEmail){
