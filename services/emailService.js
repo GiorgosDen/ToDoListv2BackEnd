@@ -58,7 +58,7 @@ const reSendVerificationEmail = async(accountID,fullName,email)=>{
         const mailConfig = {
             from: process.env.SMTP_PERSONAL_NAME,
             to: email,
-            subject: 'Email Verification (ToDoListApp v2)',
+            subject: 'Resend Email Verification (ToDoListApp v2)',
             html: `Hi ${fullName}! <br><br>
                 You have an unverified account in ToDoListApp v2! Please click the link below to verify your email address and activate your account: <br>
                 <a href="${process.env.BACK_URL}/auth/verify/${verifyToken}">Verify My Email</a><br><br>
