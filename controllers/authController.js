@@ -144,11 +144,7 @@ const completedSignUp = async(req,res)=>{
 }
 //Log Out (cleare cookie)
 const logOutUser = async(req,res)=>{
-    res.clearCookie('JWToken', {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none'
-  }).send({ success: true });
+    res.send({ success: true });
 }
 
 const updateEmailAfterVerification= async(req,res)=>{
