@@ -1,49 +1,12 @@
-# TaskMaster Backend App (v2)
-A REST API built with Node.js and following the MVC (Model-View-Controller) architecture. This backend serves as a core component of the Full-Stack [ToDoList v2 App](https://github.com/GiorgosDen/ToDOListv2).
+# Portfolio-Redeploy Backend App (v2)
+## Branch Purpose:
+This branch contains the project's files adapted to bypass strict cross-site tracking and cookie policies on iOS devices and browsers like Safari (where cookies between two different domains are blocked). These updates replace HttpOnly cookies with localStorage variables for JWT storage.
 
----
-| Part Name | Link | Tech Stack |
-| :--- | :--- | :--- |
-| **Front-End App** | [View Repo](https://github.com/GiorgosDen/ToDoListv2FrontEnd) | React, TailwindCSS |
-| **Back-End API** | `this repo` | Node.js,Express,MySQL |
+* **Main Branch:** Contains the original project logic and secure cookie architecture.
+* **Portfolio-Deployment Branch:** Deployed to Vercel and Render, using localStorage to ensure full compatibility across all mobile and desktop browsers.
 
----
-
-## Tech Stack
-* **Runtime:** Node.js
-* **Framework:** Express.js
-* **Security:** bcrypt (password hashing), JSON Web Tokens (JWT) for authorization, HttpOnly cookie for access to JWT.
-* **API Testing:** Thunder Client
-
----
-
-## Security & Architecture
-* **Password Hashing:** User passwords are securely hashed using the bcrypt library.
-* **Token-Based Auth:** JSON Web Tokens (JWT) are used for user authorization to protect routes and manage user data.
-* **HttpOnly Cookie:** Safe storage and access to JWTs.
-* **Unique Identifiers:** User emails and IDs are strictly enforced as unique identifiers.
-
----
-
-## Features & Functionalities
-### User Management
-* **Sign Up:** Public route allowing new users to register in the system.
-* **Login:** Authenticate using an email and password to receive an access JWT.
-* **Update:** Protected route allowing authorized users to update their profile information.
-* **Deregister:** Option to remove a user account from the system.
-### Task Management
-* **Daily Task Management:** Real-time state management for creating, completing, and deleting tasks.
-* **Task Status Engine:** Automatic status calculation (Pending, Completed, Expired) based on due times.
-* **Task Categories:** Organize tasks using custom categories.
-* **Task Priorities:** View detailed priority levels for tasks.
-
-## Environment & Configuration
-Configuration managed via **.env** variables for database connections and CORS options.
-
-## Roadmap
-[ ] Implement TaskCategory Router, Controller, and Model.
-[ ] Add Priority view logic.
+## Alternative approaches:
+Alternative approaches considered included purchasing a custom domain to unify the site under a single root domain or migrating to Firebase with a NoSQL database. However, this deployment branch successfully preserves the goal of a JavaScript-based full-stack project while maintaining a zero-cost publishing model.
 
 ---
 *Developed by Giorgos Den.*
-
