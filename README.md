@@ -1,3 +1,5 @@
+> 💡 **Looking for the live deployment?** This `main` branch contains the original cookie-based architecture. For the version adapted for iOS/Safari compatibility (using `localStorage` and deployed live on Render), please check out the [`portfolio-deployment` branch](https://github.com/GiorgosDen/ToDoListv2BackEnd/tree/portfolio-deployment).
+
 # TaskMaster Backend App (v2)
 A REST API built with Node.js and following the MVC (Model-View-Controller) architecture. This backend serves as a core component of the Full-Stack [ToDoList v2 App](https://github.com/GiorgosDen/ToDOListv2).
 
