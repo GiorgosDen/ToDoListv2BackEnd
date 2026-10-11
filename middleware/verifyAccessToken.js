@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken');
 
 const verifyAccessToken = async (req,res,next)=>{
-    //Get the token from JWToken cookie
-    const userToken = req.cookies.JWToken;
-    if (!userToken) {
+    //Get the accessToken
+    const userToken = req.headers.authorization;
+    if (!userToken || !userToken.startsWith('Bearer ')) {
         return res.status(401).json({ message: "No token provided, access denied" });
     }
-    jwt.verify(userToken,
+    const accessToken = userToken.split(' ')[1];
+    jwt.verify(accessToken,
         process.env.ACCESS_TOKEN_SECRET,
     (error,decodes)=>{
         console.log(error);

@@ -42,13 +42,10 @@ const authController = async (req,res)=>{
                 {expiresIn: "1h"}
             );
             //Send token with cookie and user name as JSON
-            return res.cookie("JWToken",accessToken,{
-                httpOnly:true,
-                secure:true,
-                sameSite:'none'
-            }).status(201).json({
+            return res.status(201).json({
                 message:"User login success",
-                name:fullName
+                name:fullName,
+                accessToken:accessToken
             });
 
         }else{

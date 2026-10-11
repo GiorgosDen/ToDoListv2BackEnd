@@ -19,7 +19,8 @@ const corsOptions = {
                callback(new Error('Blocked by CORS policy'));
           }
      },
-     credentials: true
+     credentials: true,
+     allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 module.exports = corsOptions;
