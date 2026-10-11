@@ -26,6 +26,8 @@ A REST API built with Node.js and following the MVC (Model-View-Controller) arch
 * **HttpOnly Cookie:** Safe storage and access to JWTs.
 * **Unique Identifiers:** User emails and IDs are strictly enforced as unique identifiers.
 * **Email Verifications:** Send emails that contain JWTs for: Verify Account, Resend Account Verification, Reset Account Password, Verify Update Account's Email, Cancel Update Account Verification, and Activate Account Again.
+* **Email Update Security & Blacklisting:** When a user cancels an email update request, the attempted new email is recorded in the suspiciouslog table. If an email accumulates 3 suspicious log records, it is automatically added to the blacklist to prevent abuse.
+
 
 ---
 
@@ -37,6 +39,7 @@ A REST API built with Node.js and following the MVC (Model-View-Controller) arch
 * **Login:** Authenticate using an email and password to receive an access JWT.
 * **LogOut:** Log out of ToDoListApp (HTTP cookies being cleared).
 * **Update:** Protected route allowing authorized users to update their profile information (fullName, password by knowing the current, email via Verification Email).
+*Note: Canceling an email update logs the new email to suspiciouslog, and hitting 3 logs automatically triggers blacklisting.*
 * **Deregister:** Option to remove a user account from the system.
 * **Cancel Deregister:** Option to cancel deregister via email within 24 hours.
 ### Task Management
