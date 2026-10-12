@@ -10,7 +10,7 @@ const verifyAccessToken = async (req,res,next)=>{
     jwt.verify(accessToken,
         process.env.ACCESS_TOKEN_SECRET,
     (error,decodes)=>{
-        console.log("ACTUAL JWT ERROR:", error.message);
+        console.log("ACTUAL JWT ERROR:", error);
         if(error) return res.status(410).json({ message:"Forbidden Token"});
         req.userID = decodes.userID;
        // console.log(decodes);
